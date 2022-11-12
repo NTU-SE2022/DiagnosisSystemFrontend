@@ -28,11 +28,11 @@ const card = (
         Doctor
       </Typography>
       <Typography variant="body2">
-        Use ID / Password to verify your ID.
+        Use ID / Password to verify your role.
       </Typography>
     </CardContent>
     <CardActions>
-      <Button variant="contained" style={{margin: '0 auto', display: "flex"}}>Login</Button>
+      <Button variant="contained" style={{margin: '0 auto', display: "flex"}} href="SignIn">Login</Button>
     </CardActions>
   </React.Fragment>
 );
