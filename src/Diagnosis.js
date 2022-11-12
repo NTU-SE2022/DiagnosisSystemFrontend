@@ -2,10 +2,13 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2';
 import DoctorLoginCard from './DoctorLoginCard';
 import WalletConnectionCard from './WalletConnectionCard';
+
+
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -20,6 +23,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function Diagnosis() {
   return (
+    <Container maxWidth="sx">
     <Box sx={{flexGrow:1, margin: 10}}>
       <Box sx={{ flexGrow: 1,boxShadow: 1, borderRadius: 2, backgroundColor: '#E0E0E0', p: 2}}>
         <Grid container spacing={2}>
@@ -33,5 +37,6 @@ export default function Diagnosis() {
         </Grid>
       </Box>
     </Box>
+    </Container>
   );
 }
