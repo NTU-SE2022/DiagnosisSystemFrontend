@@ -7,6 +7,7 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2';
 import DoctorLoginCard from './DoctorLoginCard';
 import WalletConnectionCard from './WalletConnectionCard';
+import wei from './store';
 
 
 

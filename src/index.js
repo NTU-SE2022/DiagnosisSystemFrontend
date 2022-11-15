@@ -1,8 +1,10 @@
 
 
 import React, {Fragment} from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import { StyledEngineProvider } from '@mui/material/styles';
+import store from './store';
+import { Provider } from 'react-redux'
 import Diagnosis from './Diagnosis';
 import SignIn from './Doctor/SignIn';
 import {  
@@ -19,13 +21,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 
 ReactDOM.createRoot(document.querySelector("#root")).render(
-    <Router>
-            <Routes>
-                <Route exact path="/" element={<Diagnosis />}/>
-                <Route exact path="/SignIn" element={<SignIn/>}/>
-                {/* <Route exact path="/connect" element={<Connect/>}/> */}
-            </Routes>
-    </Router>    
+    <Provider store={store}>
+        <Router>
+                <Routes>
+                    <Route exact path="/" element={<Diagnosis />}/>
+                    <Route exact path="/SignIn" element={<SignIn/>}/>
+                    {/* <Route exact path="/connect" element={<Connect/>}/> */}
+                </Routes>
+        </Router> 
+    </Provider>   
     // <React.StrictMode>
     //   <StyledEngineProvider injectFirst>
     //     <Diagnosis />
