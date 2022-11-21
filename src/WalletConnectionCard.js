@@ -31,7 +31,7 @@ const card = (
       </Typography>
     </CardContent>
     <CardActions>
-      <Button variant="contained" style={{margin: '0 auto', display: "flex"}}>Connect</Button>
+      <Button variant="contained" style={{margin: '0 auto', display: "flex"}} href="PatientCertificate">Connect</Button>
     </CardActions>
   </React.Fragment>
 );
