@@ -7,7 +7,27 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import EnterRoomButton from './EnterRommButton';
+import Tab from '@mui/material/Tab';
+import { userWallet } from '..';
+import { useNavigate } from 'react-router';
+
 export default function ButtonAppBar(props) {
+
+  const {
+    isMetaMaskInstalled,
+    provider,
+    accounts,
+    web3,
+    enable,
+    disable
+  } = React.useContext(userWallet);
+
+  const nav = useNavigate()
+  const Logout = () =>{
+    disable();
+    nav('/');
+  }
+
   return (
     <Box sx={{ flexGrow: 1 ,boxShadow: 1,borderRadius:2}}>
       <AppBar position="static">
@@ -28,7 +48,8 @@ export default function ButtonAppBar(props) {
           <Typography variant="p" component="div" sx={{ flexGrow: 1 ,textAlign: 'right',p:1}}>
             {props.username}
           </Typography>
-          <Button color = "inherit" href = "/">Sign Out</Button>
+          <Tab label="Logout" disabled={!web3} onClick={() => Logout()}></Tab>
+          {/* <Button color = "inherit" href = "/">Sign Out</Button> */}
         </Toolbar>
       </AppBar>
     </Box>

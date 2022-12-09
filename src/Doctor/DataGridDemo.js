@@ -2,7 +2,8 @@ import Button from '@mui/material/Button';
 import React, {Fragment} from "react";
 import { DataGrid, GridColDef, GridApi, GridCellValue } from '@mui/x-data-grid';
 
-const columns: GridColDef[] = [
+// const columns: GridColDef[] = [
+const columns = [
   { field: 'id', headerName: 'ID', width: 70 },
   { field: 'walletAddress', headerName: 'Wallet address', flex:0.3 },
   { field: 'date', headerName: 'Date', flex:0.3 },
@@ -32,8 +33,10 @@ const columns: GridColDef[] = [
       const onClick = (e) => {
         e.stopPropagation(); // don't select this row after clicking
 
-        const api: GridApi = params.api;
-        const thisRow: Record<string, GridCellValue> = {};
+        // const api: GridApi = params.api;
+        // const thisRow: Record<string, GridCellValue> = {};
+        const api = params.api;
+        const thisRow = {};
 
         api
           .getAllColumns()
