@@ -104,7 +104,7 @@ function BorderBox(props:any){
         <Box
         sx={{
         boxShadow: 3,
-        width: '30rem',
+        width: '40rem',
         height: '25rem',
         bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#101010' : '#fff'),
         color: (theme) =>
@@ -113,8 +113,8 @@ function BorderBox(props:any){
         m: 1,
         borderRadius: 2,
         textAlign: 'center',
-        fontSize: '0.875rem',
-        fontWeight: '700',
+        // fontSize: '0.875rem',
+        // fontWeight: '700',
         }}
         >
             <BorderBoxContent value={props.value}/>
@@ -125,8 +125,14 @@ function BorderBox(props:any){
 function BorderBoxContent(props:any){
     return(
         <Box flex={1} sx={{height:'100%',textAlign:'left' ,overflow:"auto"}}>
-        <Box component="p">id:{props.value.id}</Box>
-        <Box component="p">address:{props.value.address}</Box>
+        <Box component="span" sx={{ display: 'block' }}>
+            <Box sx={{ color: 'text.primary', fontsize:15, fontweight: 'bold', display: 'inline',}}>Certificate ID: </Box>
+            <Box sx={{ color: 'secondary.dark', fontsize:15, display: 'inline',}}>{props.value.id}</Box>
+        </Box>
+        <Box component="span" sx={{ display: 'block' }}>
+            <Box sx={{ color: 'text.primary', fontsize:15, fontweight: 'bold', display: 'inline',}}>Patient address: {props.value.address}</Box>
+            <Box sx={{ color: 'secondary.dark', fontsize:10, display: 'inline',}}>{props.value.id}</Box>
+        </Box>
         <Box component="p">symptoms:{props.value.symptoms}</Box>
         <Box component="p">levels:{props.value.levels}</Box>
         {/* <Box component="p">Category:{props.value.category}</Box>
