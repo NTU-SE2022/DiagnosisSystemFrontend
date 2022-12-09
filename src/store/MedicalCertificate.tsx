@@ -78,6 +78,7 @@ interface MedicalCertificateContract {
 }
 
 export const ContractImplementation: MedicalCertificateContract = function (info: ContractInfo){
+// export function ContractImplementation(info: ContractInfo) {
     const {
         isMetaMaskInstalled,
         provider,
@@ -96,59 +97,55 @@ export const ContractImplementation: MedicalCertificateContract = function (info
         console.log("constructor: " + info.address + " " + info.patient);
     },[info.address])
 
-    function listAllCertificate(patient: string) {
-        const [symptoms, setsymptoms] = React.useState<string>('');
-        const [levels, setlevels] = React.useState<string>('');
-        const [allCertificateId, setallCertificateId] = React.useState<string[]>([]);
+    const [symptoms, setsymptoms] = React.useState<string>('');
+    const [levels, setlevels] = React.useState<string>('');
+    const [allCertificateId, setallCertificateId] = React.useState<string[]>([]);
 
-        const getSymtoms = (id:string) => {
-            contractCall({
-                method: 'getSymptoms',
-                param: [id],
-                callback: (res) => {
-                    setsymptoms(res);
-                }
-            });
-            return symptoms;
-        }
-
-        const getLevels = (id:string) => {
-            contractCall({
-                method: 'getLevels',
-                param: [id],
-                callback: (res) => {
-                    setlevels(res);
-                }
-            });
-            return levels;
-        }
-
-        const getAllCertificateId = () => {
-            // var allCertificateId: any;
-            contractCall({
-                method: 'listCertificatesIdOfAddress',
-                param: [patient],
-                callback: (res) => {
-                    setallCertificateId(res);
-                }
-            });
-            // return allCertificateId;
-        }
-
-        React.useEffect(()=>{
-            if (connect){
-                getAllCertificateId();
-                console.log("listAllCertificate");
+    const getSymptoms = (id:string) => {
+        contractCall({
+            method: 'getSymptoms',
+            param: [id],
+            callback: (res) => {
+                setsymptoms(res);
             }
-        }, [connect])
-
-        return(
-            allCertificateId.map<MedicalCertificate>((id) => ({id:id,address:patient,symptoms:getSymtoms(id),levels:getLevels(id)}))
-        )
+        });
     }
 
-    return (
-        listAllCertificate(info.patient)
+    const getLevels = (id:string) => {
+        contractCall({
+            method: 'getLevels',
+            param: [id],
+            callback: (res) => {
+                setlevels(res);
+            }
+        });
+    }
+
+    const getAllCertificateId = () => {
+        // var allCertificateId: any;
+        contractCall({
+            method: 'listCertificatesIdOfAddress',
+            param: [info.patient],
+            callback: (res) => {
+                setallCertificateId(res);
+            }
+        });
+        // return allCertificateId;
+    }
+
+    React.useEffect(()=>{
+        if (connect){
+            getAllCertificateId();
+            console.log("listAllCertificate");
+        }
+    }, [connect])
+
+    return(
+        allCertificateId.map<MedicalCertificate>((id) => {
+            getSymptoms(id);
+            getLevels(id);
+            return ({id:id,address:info.patient,symptoms:symptoms,levels:levels});
+        })
     )
 }
 

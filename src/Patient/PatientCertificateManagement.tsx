@@ -44,9 +44,16 @@ export default function PatientCertificateManagement(){
     const [page, setPage] = React.useState(1);
     // TODO: get all patient certificates
     const [allCertificateId, setallCertificateId] = React.useState<string[]>([]);
-    const [allCertificate, setallCertificate] = React.useState<JSX.Element[]>([]);
+    const [showCertificate, setshowCertificate] = React.useState<MedicalCertificate[]>([]);
     const [pageNum,setpageNum] = React.useState(1);
-    const testFunc: MedicalCertificate[] = ContractImplementation({address:"0xe02401b8b4d84189d0c013e9e20b2c87a33a5881",patient:accounts[0]});
+    const allCertificate: MedicalCertificate[] = React.useMemo(() => ContractImplementation({address:"0xe02401b8b4d84189d0c013e9e20b2c87a33a5881",patient:accounts[0]}), []);
+    // const allCertificate: MedicalCertificate[] = [];
+
+    // const [allCertificate, setallCertificate] = React.useState<MedicalCertificate[]>(() => ContractImplementation({address:"0xe02401b8b4d84189d0c013e9e20b2c87a33a5881",patient:accounts[0]}));
+    console.log(allCertificate);
+    React.useEffect(() => {
+        setshowCertificate(allCertificate.slice((pageNum-1)*pageCount,pageNum*pageCount));
+    }, [])
 
 
     // React.useEffect(() => {
@@ -58,6 +65,7 @@ export default function PatientCertificateManagement(){
     
     const handleChange = (event:any, value:any) => {
         setpageNum(value);
+        setshowCertificate(allCertificate.slice((value-1)*pageCount,value*pageCount));
     };
     return(
         <ThemeProvider theme={theme}>
@@ -81,13 +89,14 @@ export default function PatientCertificateManagement(){
                 </Grid>
                 <Grid xs={12}>
                     <Box sx={{display: 'flex',flexDirection: 'row',p: 1,m: 1,bgcolor: 'background.paper',borderRadius: 1,justifyContent: 'flex-start'}}>
-                        { testFunc.slice((pageNum-1)*pageCount,pageNum*pageCount).map((certificate) => <BorderBox value={{id:certificate.id,address:certificate.address,symptoms:certificate.symptoms,levels:certificate.levels}} onclick ={()=>{}} />) }
+                        {/* { allCertificate.slice((pageNum-1)*pageCount,pageNum*pageCount).map((certificate) => <BorderBox value={{id:certificate.id,address:certificate.address,symptoms:certificate.symptoms,levels:certificate.levels}} onclick ={()=>{}} />) } */}
+                        {/* { allCertificate.map((certificate) => <BorderBox value={{id:certificate.id,address:certificate.address,symptoms:certificate.symptoms,levels:certificate.levels}} onclick ={()=>{}} />) } */}
                         {/* { AllMedicalCertificate({address:"0xe02401b8b4d84189d0c013e9e20b2c87a33a5881",ids:allCertificateId.slice((pageNum-1)*pageCount,pageNum*pageCount),patientAddress:accounts}) } */}
                     </Box>
                 </Grid>
                 <Grid xs={12}>
                     <Stack alignItems="center">
-                    <Pagination count={Math.ceil(testFunc.length/pageCount)} variant="outlined" onChange={handleChange} shape="rounded" sx={{margin: "auto"}}/>
+                        {/* <Pagination count={Math.ceil(allCertificate.length/pageCount)} variant="outlined" onChange={handleChange} shape="rounded" sx={{margin: "auto"}}/> */}
                     </Stack>
                 </Grid>
             </Grid>
@@ -130,7 +139,7 @@ function BorderBoxContent(props:any){
             <Box sx={{ color: 'secondary.dark', fontsize:15, display: 'inline',}}>{props.value.id}</Box>
         </Box>
         <Box component="span" sx={{ display: 'block' }}>
-            <Box sx={{ color: 'text.primary', fontsize:15, fontweight: 'bold', display: 'inline',}}>Patient address: {props.value.address}</Box>
+            <Box sx={{ color: 'text.primary', fontsize:15, fontweight: 'bold', display: 'inline',}}>Patient: {props.value.address}</Box>
             <Box sx={{ color: 'secondary.dark', fontsize:10, display: 'inline',}}>{props.value.id}</Box>
         </Box>
         <Box component="p">symptoms:{props.value.symptoms}</Box>
