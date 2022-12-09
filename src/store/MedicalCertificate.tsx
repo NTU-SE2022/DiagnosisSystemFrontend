@@ -50,18 +50,9 @@ export interface MedicalCertificate {
     levels: string;
 }
 
-interface ContractAddress{
+export interface ContractInfo{
     address: string;
-}
-
-export interface CertificateId{
-    id: string;
-}
-
-export interface CertificateInfo{
-    address: string
-    id: string;
-    patientAddress: string;
+    patient: string;
 }
 
 export interface CertificatesInfo{
@@ -82,11 +73,11 @@ interface Web3FunctionParam {
     callback: (para:ContractCallParam) => void;
 }
 
-export interface MedicalCertificateContract {
-    (address:string, patient:string): MedicalCertificate[];
+interface MedicalCertificateContract {
+    (info: ContractInfo): MedicalCertificate[];
 }
 
-export const ContractImplementation: MedicalCertificateContract = function (address:string, patient:string){
+export const ContractImplementation: MedicalCertificateContract = function (info: ContractInfo){
     const {
         isMetaMaskInstalled,
         provider,
@@ -96,42 +87,40 @@ export const ContractImplementation: MedicalCertificateContract = function (addr
         disable
     } = React.useContext(userWallet);
 
-    const {contract,connectContract,disconnectContract,logcontract} = Web3function({web3:web3,accounts:accounts,abi:abijson,address:address})
+    const {contract,connectContract,disconnectContract,logcontract} = Web3function({web3:web3,accounts:accounts,abi:abijson,address:info.address})
     const{contractCall} = ContractActions({contract:contract,accounts:accounts});
     const [connect,setConnect] = React.useState(false)
     React.useEffect(()=>{
         connectContract()
         setConnect(true)
-    },[address])
-    console.log("constructor: " + address + " " + patient);
-
-    
+        console.log("constructor: " + info.address + " " + info.patient);
+    },[info.address])
 
     function listAllCertificate(patient: string) {
+        const [symptoms, setsymptoms] = React.useState<string>('');
+        const [levels, setlevels] = React.useState<string>('');
         const [allCertificateId, setallCertificateId] = React.useState<string[]>([]);
 
         const getSymtoms = (id:string) => {
-            var symptoms: any;
             contractCall({
                 method: 'getSymptoms',
                 param: [id],
                 callback: (res) => {
-                    symptoms = res;
+                    setsymptoms(res);
                 }
             });
-            return (symptoms);
+            return symptoms;
         }
 
         const getLevels = (id:string) => {
-            var levels: any;
             contractCall({
                 method: 'getLevels',
                 param: [id],
                 callback: (res) => {
-                    levels = res;
+                    setlevels(res);
                 }
             });
-            return (levels);
+            return levels;
         }
 
         const getAllCertificateId = () => {
@@ -143,16 +132,23 @@ export const ContractImplementation: MedicalCertificateContract = function (addr
                     setallCertificateId(res);
                 }
             });
-            return (allCertificateId);
+            // return allCertificateId;
         }
 
+        React.useEffect(()=>{
+            if (connect){
+                getAllCertificateId();
+                console.log("listAllCertificate");
+            }
+        }, [connect])
+
         return(
-            getAllCertificateId().map<MedicalCertificate>((id) => ({id:id,address:patient,symptoms:getSymtoms(id),levels:getLevels(id)}))
+            allCertificateId.map<MedicalCertificate>((id) => ({id:id,address:patient,symptoms:getSymtoms(id),levels:getLevels(id)}))
         )
     }
 
     return (
-        listAllCertificate(patient)
+        listAllCertificate(info.patient)
     )
 }
 

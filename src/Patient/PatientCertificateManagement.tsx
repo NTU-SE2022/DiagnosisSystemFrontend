@@ -16,7 +16,7 @@ import {Stack} from '@mui/material';
 import PropTypes from 'prop-types';
 import { userWallet } from '..';
 import axios from "axios";
-import { AllMedicalCertificate, ContractImplementation, MedicalCertificate, MedicalCertificateContract } from '../store/MedicalCertificate';
+import { AllMedicalCertificate, ContractImplementation, MedicalCertificate } from '../store/MedicalCertificate';
 
 
 
@@ -30,10 +30,6 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const theme = createTheme();
 
-function test(){
-    return ["0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"];
-}
-
 export default function PatientCertificateManagement(){
     const {
         isMetaMaskInstalled,
@@ -44,14 +40,13 @@ export default function PatientCertificateManagement(){
         disable
     } = React.useContext(userWallet);
 
-    const pageCount = 5;
+    const pageCount = 2;
     const [page, setPage] = React.useState(1);
     // TODO: get all patient certificates
     const [allCertificateId, setallCertificateId] = React.useState<string[]>([]);
     const [allCertificate, setallCertificate] = React.useState<JSX.Element[]>([]);
     const [pageNum,setpageNum] = React.useState(1);
-    const testFunc: MedicalCertificate[] = ContractImplementation("0xe02401b8b4d84189d0c013e9e20b2c87a33a5881","0x81025fa5928c40c679d914e4c43f5d3e38018b11");
-
+    const testFunc: MedicalCertificate[] = ContractImplementation({address:"0xe02401b8b4d84189d0c013e9e20b2c87a33a5881",patient:accounts[0]});
 
 
     // React.useEffect(() => {
@@ -86,7 +81,7 @@ export default function PatientCertificateManagement(){
                 </Grid>
                 <Grid xs={12}>
                     <Box sx={{display: 'flex',flexDirection: 'row',p: 1,m: 1,bgcolor: 'background.paper',borderRadius: 1,justifyContent: 'flex-start'}}>
-                        { testFunc.map((certificate) => <BorderBox value={{id:certificate.id,address:certificate.address,symptoms:certificate.symptoms,levels:certificate.levels}} onclick ={()=>{}} />) }
+                        { testFunc.slice((pageNum-1)*pageCount,pageNum*pageCount).map((certificate) => <BorderBox value={{id:certificate.id,address:certificate.address,symptoms:certificate.symptoms,levels:certificate.levels}} onclick ={()=>{}} />) }
                         {/* { AllMedicalCertificate({address:"0xe02401b8b4d84189d0c013e9e20b2c87a33a5881",ids:allCertificateId.slice((pageNum-1)*pageCount,pageNum*pageCount),patientAddress:accounts}) } */}
                     </Box>
                 </Grid>
@@ -109,8 +104,8 @@ function BorderBox(props:any){
         <Box
         sx={{
         boxShadow: 3,
-        width: '12rem',
-        height: '10rem',
+        width: '30rem',
+        height: '25rem',
         bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#101010' : '#fff'),
         color: (theme) =>
             theme.palette.mode === 'dark' ? 'grey.300' : 'grey.800',
