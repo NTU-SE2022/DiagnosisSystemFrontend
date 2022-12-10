@@ -79,6 +79,7 @@ const card = () => {
     disable
   } = React.useContext(userWallet);
   const navigate = useNavigate();
+  console.log("WalletConnectionCard")
   React.useEffect(()=>{
     if(!accounts.length == 0){
       console.log(`Wallet:${accounts}`)

@@ -25,20 +25,24 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 export const userWallet = React.createContext()
 
+export const backendInfo = React.createContext()
+
 const App = () =>{
     return(
         <Provider store={store}>
             <userWallet.Provider value={useEthereum()}>
-            <Router>
-                <Routes>
-                    <Route exact path="/" element={<Diagnosis />}/>
-                    <Route exact path="/SignIn" element={<SignIn/>}/>
-                    <Route exact path="/Certificate" element={<CertificateManagement/>}/>
-                    <Route exact path="/PatientCertificate" element={<PatientCertificateManagement/>}/>
-                    <Route exact path="/CertificateRecord" element={<OutCertificate/>}/>
-                    <Route exact path="/CreateCertificate" element={<CreateCertificate symptom={SymptomList()}/>}/>
-                </Routes>
-            </Router>
+                <backendInfo.Provider value={{baseURL: "http://diagnosis-back.host.chillmonkey.com.tw/api/"}}>
+                    <Router>
+                        <Routes>
+                            <Route exact path="/" element={<Diagnosis />}/>
+                            <Route exact path="/SignIn" element={<SignIn/>}/>
+                            <Route exact path="/Certificate" element={<CertificateManagement/>}/>
+                            <Route exact path="/PatientCertificate" element={<PatientCertificateManagement/>}/>
+                            <Route exact path="/CertificateRecord" element={<OutCertificate/>}/>
+                            <Route exact path="/CreateCertificate" element={<CreateCertificate symptom={SymptomList()}/>}/>
+                        </Routes>
+                    </Router>
+                </backendInfo.Provider>
             </userWallet.Provider> 
         </Provider>
     )  
