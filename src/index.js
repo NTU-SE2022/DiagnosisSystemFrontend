@@ -26,6 +26,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 export const userWallet = React.createContext()
 
 const App = () =>{
+    // console.log(SymptomList());
     return(
         <Provider store={store}>
             <userWallet.Provider value={useEthereum()}>
@@ -36,7 +37,7 @@ const App = () =>{
                     <Route exact path="/Certificate" element={<CertificateManagement/>}/>
                     <Route exact path="/PatientCertificate" element={<PatientCertificateManagement/>}/>
                     <Route exact path="/CertificateRecord" element={<OutCertificate/>}/>
-                    <Route exact path="/CreateCertificate" element={<CreateCertificate symptom={SymptomList()}/>}/>
+                    <Route exact path="/CreateCertificate/:account" element={<CreateCertificate symptom={SymptomList()}/>}/>
                 </Routes>
             </Router>
             </userWallet.Provider> 

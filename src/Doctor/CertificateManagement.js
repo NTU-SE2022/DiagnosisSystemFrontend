@@ -13,7 +13,7 @@ import Paper from '@mui/material/Paper';
 import { Button } from '@mui/material';
 import DataGridDemo from './DataGridDemo';
 import ButtonAppBar from './AppBar';
-
+import axios from "axios";
 // const rows: GridRowsProp = [
 //   { id: 1, col1: "Hello", col2: "World" },
 //   { id: 2, col1: "MUI X", col2: "is awesome" },
@@ -52,8 +52,26 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
   }));
 
+const config = {
+    baseURL: "https://diagnosis-back.host.chillmonkey.com.tw/api/patientAddresses",
+    // baseURL:"http://localhost:3000/testdata/test.json"
+}
+
 const theme = createTheme();
 export default function CertificateManagement(){
+    const [patientAddress,setPatientAddress] = React.useState([]);
+    const [loading,setLoading] = React.useState(true);
+    const [nowAccount,setNowAccount] = React.useState("123456");
+    React.useEffect(() => {
+        axios(config).then(response => {
+            setPatientAddress(response.data.response.patient);
+            console.log(response.data.response.patient);
+            setLoading(false);
+        }).catch(error =>{
+          console.log(error);
+        });
+      }, []);
+
     return(
         <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="sx" sx={{ flexGrow: 1,boxShadow: 1, borderRadius: 2, backgroundColor: '#E0E0E0', p: 2}}>
@@ -97,11 +115,11 @@ export default function CertificateManagement(){
                         </Grid>
                         <Grid item xs ={12}>
                             <Box component="p"  sx={{display:'block'}}>
-                                123456789
+                                {nowAccount}
                             </Box>
                         </Grid>
                         <Grid item xs ={12}>
-                            <Button fullWidth variant="contained" sx={{backgroundColor: 'red'}} href='CreateCertificate'>Create</Button>
+                            <Button fullWidth variant="contained" sx={{backgroundColor: 'red'}} href={`CreateCertificate/${nowAccount}`}>Create</Button>
                         </Grid>
                     </Grid>
                 </Grid>
