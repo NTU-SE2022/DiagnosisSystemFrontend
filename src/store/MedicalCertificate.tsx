@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { userWallet } from '..';
+import { userWallet, backendInfo } from '..';
 import Web3function from '../WEB3/Web3function';
 import abijson from '../WEB3/MedicalCertificateAbi.json';
 import Box from '@mui/material/Box';
@@ -24,7 +24,7 @@ interface Web3FunctionParam {
     callback: (para:ContractCallParam) => void;
 }
 
-export const AllMedicalCertificate = (address: string) => {
+export function AllMedicalCertificate() {
     const {
         isMetaMaskInstalled,
         provider,
@@ -34,13 +34,17 @@ export const AllMedicalCertificate = (address: string) => {
         disable
     } = React.useContext(userWallet);
 
-    const {contract,connectContract,disconnectContract,logcontract} = Web3function({web3:web3,accounts:accounts,abi:abijson,address:address})
+    const {
+        ContractAddress
+    } = React.useContext(backendInfo);
+
+    const {contract,connectContract,disconnectContract,logcontract} = Web3function({web3:web3,accounts:accounts,abi:abijson,address:ContractAddress})
     const{contractCall} = ContractActions({contract:contract,accounts:accounts});
     const [connect,setConnect] = React.useState(false)
     React.useEffect(()=>{
         connectContract()
         setConnect(true)
-    },[address])
+    },[ContractAddress])
 
     React.useEffect(()=>{
         if (connect){

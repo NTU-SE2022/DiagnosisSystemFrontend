@@ -37,37 +37,18 @@ const LoginButton = ({
 console.log(accounts)
 return(
   <Button
-      variant="contained"
-      style={{margin: '0 auto', display: "flex"}}
-      onClick={() => {
-        enable();
-      }}
-      disabled={Boolean(web3)}
+    variant="contained"
+    style={{margin: '0 auto', display: "flex"}}
+    onClick={() => {
+      enable();
+    }}
+    disabled={Boolean(web3)}
   >
-      Connect
+    Connect
   </Button>
 )
-
 }
 
-// const card = (
-//   <React.Fragment>
-//     <CardContent>
-//       <Typography variant="h5" component="div">
-//         <FontAwesomeIcon icon={faUsers} fontSize="100px"/>
-//       </Typography>
-//       <Typography sx={{ mb: 1.5 }} color="text.secondary">
-//         Patients
-//       </Typography>
-//       <Typography variant="body2">
-//         Connect your wallet.
-//       </Typography>
-//     </CardContent>
-//     <CardActions>
-//       <Button variant="contained" style={{margin: '0 auto', display: "flex"}} href="PatientCertificate">Connect</Button>
-//     </CardActions>
-//   </React.Fragment>
-// );
 
 const card = () => {
   const {

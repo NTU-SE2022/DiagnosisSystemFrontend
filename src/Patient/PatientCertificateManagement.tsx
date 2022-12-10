@@ -42,13 +42,28 @@ export default function PatientCertificateManagement(){
 
     const pageCount = 2;
     const [pageNum,setpageNum] = React.useState(1);
-    const allCertificate: MedicalCertificate[] = AllMedicalCertificate("0xe02401b8b4d84189d0c013e9e20b2c87a33a5881");
+    const allCertificate: MedicalCertificate[] = AllMedicalCertificate();
+    const [showCertificate, setshowCertificate] = React.useState<MedicalCertificate[]>(allCertificate);
+    const [refresh, setrefresh] = React.useState(false);
+    const [symptoms, setsymptoms] = React.useState('');
+    const [levels, setlevels] = React.useState('');
+    const [search, setsearch] = React.useState(false);
 
-    // const [allCertificate, setallCertificate] = React.useState<MedicalCertificate[]>(() => ContractImplementation({address:"0xe02401b8b4d84189d0c013e9e20b2c87a33a5881",patient:accounts[0]}));
-    console.log(allCertificate);
+    React.useEffect(()=>{
+        setshowCertificate(allCertificate);
+    }, [allCertificate.length, refresh])
     
+    const Search = () => {
+        setsearch(true);
+        setshowCertificate(allCertificate.filter((certificate: MedicalCertificate) => certificate.symptoms.toLowerCase().includes(symptoms.toLowerCase())));
+        setshowCertificate(certificates => certificates.filter((certificate: MedicalCertificate) => certificate.levels.includes(levels)));
+        setsearch(false);
+    }
+
+    // console.log(showCertificate);
     const handleChange = (event:any, value:any) => {
         setpageNum(value);
+        setrefresh(true);
     };
 
     return(
@@ -59,26 +74,23 @@ export default function PatientCertificateManagement(){
                 <Grid xs={12}>
                     <Item><ButtonAppBar title="Certificate Management" username={accounts}></ButtonAppBar></Item>
                 </Grid>
-                {/* <Grid xs = {6} sx={{textAlign:'center'}}>
-                    <DateTimePicker fullWidth></DateTimePicker>
-                </Grid> */}
                 <Grid xs = {5} sx={{textAlign:'center'}}>
-                    <TextField fullWidth id="Symptom" label="Symptom"/>
+                    <TextField fullWidth id="Symptom" label="Symptom" onChange = {(ev) => {setsymptoms(ev.target.value)}}/>
                 </Grid>
                 <Grid xs = {5} sx={{textAlign:'center'}}>
-                    <TextField fullWidth id="SeverityScale" label="Severity scale (0~3)"/>
+                    <TextField fullWidth id="SeverityScale" label="Severity scale (0~3)" onChange = {(ev) => {setlevels(ev.target.value)}}/>
                 </Grid>
                 <Grid sx={{textAlign:'center', height:'100%'}}>
-                    <Button variant="contained">Search</Button>
+                    <Button variant="contained" disabled={search} onClick={Search} >Search</Button>
                 </Grid>
                 <Grid xs={12}>
                     <Box sx={{display: 'flex',flexDirection: 'row',p: 1,m: 1,bgcolor: 'background.paper',borderRadius: 1,justifyContent: 'flex-start'}}>
-                        { allCertificate.slice((pageNum-1)*pageCount,pageNum*pageCount).map((certificate) => <BorderBox value={{id:certificate.id,address:certificate.address,symptoms:certificate.symptoms,levels:certificate.levels}} onclick ={()=>{}} />) }
+                        { showCertificate.slice((pageNum-1)*pageCount,pageNum*pageCount).map((certificate) => <BorderBox value={{id:certificate.id,address:certificate.address,symptoms:certificate.symptoms,levels:certificate.levels}} onclick ={()=>{}} />) }
                     </Box>
                 </Grid>
                 <Grid xs={12}>
                     <Stack alignItems="center">
-                        <Pagination count={Math.ceil(allCertificate.length/pageCount)} variant="outlined" onChange={handleChange} shape="rounded" sx={{margin: "auto"}}/>
+                        <Pagination count={Math.ceil(showCertificate.length/pageCount)} variant="outlined" onChange={handleChange} shape="rounded" sx={{margin: "auto"}}/>
                     </Stack>
                 </Grid>
             </Grid>
@@ -104,8 +116,6 @@ function BorderBox(props:any){
         m: 1,
         borderRadius: 2,
         textAlign: 'center',
-        // fontSize: '0.875rem',
-        // fontWeight: '700',
         }}
         >
             <BorderBoxContent value={props.value}/>
