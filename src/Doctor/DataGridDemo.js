@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 import React, {Fragment} from "react";
-import { DataGridPro, GridColDef, GridApi, GridCellValue,GridToolbar  } from '@mui/x-data-grid-pro';
+import { DataGrid, GridColDef, GridApi, GridCellValue,GridToolbar  } from '@mui/x-data-grid';
 import OutCertificate from './Certificate';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -76,7 +76,14 @@ const rows = [
 
 export default function DataGridDemo(props) {
   let patientCertificate = props.rows
-  const customFilter = props.filter
+  console.log(props.filter)
+  if(props.filter.patientAddress != ""){
+    patientCertificate =patientCertificate.filter(row=>row.patientAddress.includes(props.filter.patientAddress))
+  }
+  if(props.filter.symptoms != ""){
+    patientCertificate =patientCertificate.filter(row=>row.symptoms.includes(props.filter.symptoms))
+  }
+  // const customFilter = props.filter
   // [
   //   { id: 1, columnField: 'symptoms', operatorValue: 'contains', value: 'B' },
   //   { id: 2, columnField: 'id', operatorValue: 'contains', value: 0 }
@@ -86,7 +93,7 @@ export default function DataGridDemo(props) {
   });
   return (
     <div style={{ height: 400, width: '100%' }}>
-      <DataGridPro rows={patientCertificate} columns={columns}  filterModel={{items: customFilter,linkOperator: GridLinkOperator.And,}}pageSize={5}/>
+      <DataGrid rows={patientCertificate} columns={columns} pageSize={5}/>
     </div>
   );
 }

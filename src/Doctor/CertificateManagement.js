@@ -50,7 +50,7 @@ export default function CertificateManagement(){
     const navigate = useNavigate();
     const {auth} = React.useContext(AuthContext);
     const [patientAddress,setPatientAddress] = React.useState([]);
-    const [customFilter,setCustomFilter] = React.useState([]);
+    const [customFilter,setCustomFilter] = React.useState({'patientAddress':'','symptoms':''});
     const [patientAddressKeyword,setPatientAddressKeyword] = React.useState('');
     const [symptomsKeyword,setSymptomsKeyword] = React.useState('');
     const [loading,setLoading] = React.useState(true);
@@ -130,13 +130,20 @@ export default function CertificateManagement(){
     },[addressListRoom2])
 
     const setFilter = () =>{
-        setCustomFilter([])
-        if(patientAddressKeyword != ''){
-            setCustomFilter(custom=>[...custom,{id:0,columnField:'patientAddress',operatorValue: 'contains', value: patientAddressKeyword}])
-        }
-        if(symptomsKeyword != ''){
-            setCustomFilter(custom=>[...custom,{id:1,columnField:'symptoms',operatorValue: 'contains', value: symptomsKeyword}])
-        }
+        let updatedValue = {};
+        updatedValue = {'patientAddress':patientAddressKeyword,'symptoms':symptomsKeyword};
+        setCustomFilter(customFilter=>({
+            ...customFilter,...updatedValue
+        }));
+        // setCustomFilter([])
+        // if(patientAddressKeyword != ''){
+        //     customFilter['patientAddress'] = patientAddressKeyword
+        //     // setCustomFilter(custom=>[...custom,{'patientAddress': patientAddressKeyword}])
+        // }
+        // if(symptomsKeyword != ''){
+        //     customFilter['symptoms'] = symptomsKeyword
+        //     // setCustomFilter(custom=>[...custom,{id:1,columnField:'symptoms',operatorValue: 'contains', value: symptomsKeyword}])
+        // }
     }
     console.log(auth['account'])
     return(
