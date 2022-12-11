@@ -14,7 +14,7 @@ import { Button } from '@mui/material';
 import DataGridDemo from './DataGridDemo';
 import ButtonAppBar from './AppBar';
 import axios from "axios";
-import AuthContext from '../Context/AuthProvider';
+import { AuthContext } from '..';
 // const rows: GridRowsProp = [
 //   { id: 1, col1: "Hello", col2: "World" },
 //   { id: 2, col1: "MUI X", col2: "is awesome" },
@@ -45,7 +45,7 @@ const client = axios.create({
 
 const theme = createTheme();
 export default function CertificateManagement(){
-    // const {auth} = React.useContext(AuthContext);
+    const {auth} = React.useContext(AuthContext);
     const [patientAddress,setPatientAddress] = React.useState([]);
     const [customFilter,setCustomFilter] = React.useState([]);
     const [patientAddressKeyword,setPatientAddressKeyword] = React.useState('');
@@ -55,7 +55,9 @@ export default function CertificateManagement(){
     const [nowAccount,setNowAccount] = React.useState("");
     const [addressListRoom2,setAddressListRoom2] = React.useState([])
     const [nowAccountRoom2,setNowAccountRoom2] = React.useState("");
-    // console.log(auth)
+    React.useEffect(()=>{
+        console.log(auth)
+    },[auth])
     // if(!auth){
     //     // alert('尚未登入')
     //     // window.location.href='/SignIn'
@@ -176,7 +178,7 @@ export default function CertificateManagement(){
                             </Box>
                         </Grid>
                         <Grid item xs ={12}>
-                            <Button fullWidth variant="contained" sx={{backgroundColor: 'red'}} href={`CreateCertificate/1/${nowAccount}`}>Create</Button>
+                            <Button fullWidth variant="contained" sx={{backgroundColor: 'red'}} href={`CreateCertificate/1/${nowAccount}`} disabled={Boolean(nowAccount=="")}>Create</Button>
                         </Grid>
                     </Grid>
                     <Grid item xs container rowSpacing={3} sx={{backgroundColor: '#fff',boxShadow:1,borderRadius: 2,p:2,m:2,textAlign: 'center'}}>
@@ -191,7 +193,7 @@ export default function CertificateManagement(){
                             </Box>
                         </Grid>
                         <Grid item xs ={12}>
-                            <Button fullWidth variant="contained" sx={{backgroundColor: 'red'}} href={`CreateCertificate/2/${nowAccountRoom2}`}>Create</Button>
+                            <Button fullWidth variant="contained" sx={{backgroundColor: 'red'}} href={`CreateCertificate/2/${nowAccountRoom2}`} disabled={Boolean(nowAccountRoom2=="")}>Create</Button>
                         </Grid>
                     </Grid>
                 </Grid>
