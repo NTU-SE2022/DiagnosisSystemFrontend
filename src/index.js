@@ -30,19 +30,17 @@ const App = () =>{
     return(
         <Provider store={store}>
             <userWallet.Provider value={useEthereum()}>
-                <backendInfo.Provider value={{baseURL: "http://diagnosis-back.host.chillmonkey.com.tw/api/", ContractAddress: "0x448f50b88d03b434cee1b7febf9f6cad51983565"}}>
-                    <AuthProvider>
-                        <Router>
-                            <Routes>
-                                <Route exact path="/" element={<Diagnosis />}/>
-                                <Route exact path="/SignIn" element={<SignIn/>}/>
-                                <Route exact path="/Certificate" element={<CertificateManagement/>}/>
-                                <Route exact path="/PatientCertificate" element={<PatientCertificateManagement/>}/>
-                                <Route exact path="/CertificateRecord" element={<OutCertificate/>}/>
-                                <Route exact path="/CreateCertificate/:room/:account" element={<CreateCertificate/>}/>
-                            </Routes>
-                        </Router>
-                    </AuthProvider> 
+                <backendInfo.Provider value={{baseURL: "https://diagnosis-back.host.chillmonkey.com.tw/api", ContractAddress: "0x448f50b88d03b434cee1b7febf9f6cad51983565"}}>
+                    <Router>
+                        <Routes>
+                            <Route exact path="/" element={<Diagnosis />}/>
+                            <Route exact path="/SignIn" element={<SignIn/>}/>
+                            <Route exact path="/Certificate" element={<CertificateManagement/>}/>
+                            <Route exact path="/PatientCertificate" element={<PatientCertificateManagement/>}/>
+                            <Route exact path="/CertificateRecord" element={<OutCertificate/>}/>
+                            <Route exact path="/CreateCertificate/:room/:account" element={<CreateCertificate/>}/>
+                        </Routes>
+                    </Router>
                 </backendInfo.Provider>
             </userWallet.Provider> 
         </Provider>
