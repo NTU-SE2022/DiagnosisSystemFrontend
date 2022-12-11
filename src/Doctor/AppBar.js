@@ -29,7 +29,7 @@ export default function ButtonAppBar() {
           <Typography variant="h3" component="div" sx={{ flexGrow: 1 ,textAlign: 'left',p:2}}>
             Certificate Management
           </Typography>
-          <Typography variant="p" component="div" sx={{ flexGrow: 1 ,textAlign: 'right',p:1}}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 ,textAlign: 'right',p:1}}>
             {auth.account}
           </Typography>
           <Button color = "inherit" onClick={logout}>Sign Out</Button>

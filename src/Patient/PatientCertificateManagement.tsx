@@ -55,11 +55,17 @@ export default function PatientCertificateManagement(){
     
     const Search = () => {
         setsearch(true);
+        setpageNum(1);
         setshowCertificate(allCertificate.filter((certificate: MedicalCertificate) => certificate.symptoms.some((item) => item.symptom.toLowerCase().includes(symptom.toLowerCase()) && item.level.includes(level))));
         setsearch(false);
     }
 
+    // React.useEffect(() => {
+    //     setshowCertificate(allCertificate.filter((certificate: MedicalCertificate) => certificate.symptoms.some((item) => item.symptom.toLowerCase().includes(symptom.toLowerCase()) && item.level.includes(level))));
+    // }, [search])
+
     // console.log(showCertificate);
+    // console.log(allCertificate);
     const handleChange = (event:any, value:any) => {
         setpageNum(value);
         setrefresh(true);
@@ -89,7 +95,7 @@ export default function PatientCertificateManagement(){
                 </Grid>
                 <Grid xs={12}>
                     <Stack alignItems="center">
-                        <Pagination count={Math.ceil(showCertificate.length/pageCount)} variant="outlined" onChange={handleChange} shape="rounded" sx={{margin: "auto"}}/>
+                        <Pagination count={Math.ceil(showCertificate.length/pageCount)} page={pageNum} variant="outlined" onChange={handleChange} shape="rounded" sx={{margin: "auto"}}/>
                     </Stack>
                 </Grid>
             </Grid>
