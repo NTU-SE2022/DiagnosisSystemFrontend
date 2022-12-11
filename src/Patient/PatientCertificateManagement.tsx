@@ -16,7 +16,7 @@ import {Stack} from '@mui/material';
 import PropTypes from 'prop-types';
 import { userWallet } from '..';
 import axios from "axios";
-import { AllMedicalCertificate, MedicalCertificate } from '../store/MedicalCertificate';
+import { AllMedicalCertificate, MedicalCertificate, Symptom } from '../store/MedicalCertificate';
 
 
 
@@ -45,8 +45,8 @@ export default function PatientCertificateManagement(){
     const allCertificate: MedicalCertificate[] = AllMedicalCertificate();
     const [showCertificate, setshowCertificate] = React.useState<MedicalCertificate[]>(allCertificate);
     const [refresh, setrefresh] = React.useState(false);
-    const [symptoms, setsymptoms] = React.useState('');
-    const [levels, setlevels] = React.useState('');
+    const [symptom, setsymptom] = React.useState('');
+    const [level, setlevel] = React.useState('');
     const [search, setsearch] = React.useState(false);
 
     React.useEffect(()=>{
@@ -55,8 +55,7 @@ export default function PatientCertificateManagement(){
     
     const Search = () => {
         setsearch(true);
-        setshowCertificate(allCertificate.filter((certificate: MedicalCertificate) => certificate.symptoms.toLowerCase().includes(symptoms.toLowerCase())));
-        setshowCertificate(certificates => certificates.filter((certificate: MedicalCertificate) => certificate.levels.includes(levels)));
+        setshowCertificate(allCertificate.filter((certificate: MedicalCertificate) => certificate.symptoms.some((item) => item.symptom.toLowerCase().includes(symptom.toLowerCase()) && item.level.includes(level))));
         setsearch(false);
     }
 
@@ -75,17 +74,17 @@ export default function PatientCertificateManagement(){
                     <Item><ButtonAppBar title="Certificate Management" username={accounts}></ButtonAppBar></Item>
                 </Grid>
                 <Grid xs = {5} sx={{textAlign:'center'}}>
-                    <TextField fullWidth id="Symptom" label="Symptom" onChange = {(ev) => {setsymptoms(ev.target.value)}}/>
+                    <TextField fullWidth id="Symptom" label="Symptom" onChange = {(ev) => {setsymptom(ev.target.value)}}/>
                 </Grid>
                 <Grid xs = {5} sx={{textAlign:'center'}}>
-                    <TextField fullWidth id="SeverityScale" label="Severity scale (0~3)" onChange = {(ev) => {setlevels(ev.target.value)}}/>
+                    <TextField fullWidth id="SeverityScale" label="Severity scale (0~3)" onChange = {(ev) => {setlevel(ev.target.value)}}/>
                 </Grid>
                 <Grid sx={{textAlign:'center', height:'100%'}}>
                     <Button variant="contained" disabled={search} onClick={Search} >Search</Button>
                 </Grid>
                 <Grid xs={12}>
                     <Box sx={{display: 'flex',flexDirection: 'row',p: 1,m: 1,bgcolor: 'background.paper',borderRadius: 1,justifyContent: 'flex-start'}}>
-                        { showCertificate.slice((pageNum-1)*pageCount,pageNum*pageCount).map((certificate) => <BorderBox value={{id:certificate.id,address:certificate.address,symptoms:certificate.symptoms,levels:certificate.levels}} onclick ={()=>{}} />) }
+                        { showCertificate.slice((pageNum-1)*pageCount,pageNum*pageCount).map((certificate) => <BorderBox value={{id:certificate.id,symptoms:certificate.symptoms}} onclick ={()=>{}} />) }
                     </Box>
                 </Grid>
                 <Grid xs={12}>
@@ -124,8 +123,7 @@ function BorderBox(props:any){
 }
 
 function BorderBoxContent(props:any){
-    const symptoms: string[] = props.value.symptoms.split(',');
-    const levels: string[] = props.value.levels.split(',');
+    const symptoms: Symptom[] = props.value.symptoms;
     var colors: {[index: string]:string} = {};
     colors['0'] = 'success.dark';
     colors['1'] = 'info.dark';
@@ -151,7 +149,7 @@ function BorderBoxContent(props:any){
         </Box> */}
         <Box component="h4" sx={{ color: 'text.primary', fontsize:40, fontweight:'bold'}}>Symptoms:</Box>
         <Box component="h6" sx={{display: 'block'}}>
-            {symptoms.map(function(e,i){return <Box sx={{display: 'block', color:colors[levels[i]]}}>{e} {levelDescriptions[levels[i]]}</Box>})}
+            {symptoms.map((symptom) => {return <Box sx={{display: 'block', color:colors[symptom.level]}}>{symptom.symptom} {levelDescriptions[symptom.level]}</Box>})}
         </Box>
         {/* <Box component="p">symptoms:{props.value.symptoms}</Box>
         <Box component="p">levels:{props.value.levels}</Box> */}
