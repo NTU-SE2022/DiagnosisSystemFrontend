@@ -37,7 +37,7 @@ const App = () =>{
                     <Route exact path="/Certificate" element={<CertificateManagement/>}/>
                     <Route exact path="/PatientCertificate" element={<PatientCertificateManagement/>}/>
                     <Route exact path="/CertificateRecord" element={<OutCertificate/>}/>
-                    <Route exact path="/CreateCertificate/:account" element={<CreateCertificate symptom={SymptomList()}/>}/>
+                    <Route exact path="/CreateCertificate/:account" element={<CreateCertificate/>}/>
                 </Routes>
             </Router>
             </userWallet.Provider> 

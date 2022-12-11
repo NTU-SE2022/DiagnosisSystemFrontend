@@ -10,23 +10,23 @@ import axios from "axios";
 export default function CreateCertificateButton(props) {
   const [open, setOpen] = React.useState(false);
   const [context,setContext] =React.useState("生成及發送 NFT 至病人錢包中...")
-  const config = {
-    // baseURL: "https://diagnosis-back.host.chillmonkey.com.tw/api/createCertificate",
-    // baseURL:"http://localhost:3000/testdata/test.json"
-  }
+  const client = axios.create({
+    baseURL: "https://diagnosis-back.host.chillmonkey.com.tw/api" 
+  });
 
   const handleClickOpen = () => {
       const {symptom,level} = setSymptomAndLevel(props.allSymptoms,props.hasSymptoms)
       const send_body = {
-        patientAddress:props.account,
+        // patientAddress:props.account,
+        patientAddress:'0xA6023C4C2527604Dd4Cb7F915d2a1194aa909D4A',
         symptoms:symptom,
         levels:level
       }
-      console.log(send_body);
       setOpen(true);
       setContext("生成及發送 NFT 至病人錢包中...");
-      axios.post(config.baseURL,send_body).then(response => {
-        if(response.data.status == 200){
+      client.post('/createMedicalCertificate',send_body).then(response => {
+        console.log(response)
+        if(response.data.status == 201){
           setContext("發送完成")
         }else{
           setContext("發送失敗")

@@ -35,22 +35,22 @@ const theme = createTheme();
 
 export default function SignIn() {
 
-  const config = {
-    // baseURL: "https://diagnosis-back.host.chillmonkey.com.tw/api/login",
-    baseURL:"http://localhost:3000/testdata/testlogin.json"
-  }
+  const client = axios.create({
+    baseURL: "https://diagnosis-back.host.chillmonkey.com.tw/api" 
+  });
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const send_body = {account:data.get('account'),password:data.get('password')}
-    axios(config.baseURL,send_body).then(response => {
-      if(response.data.success){
+    client.post('/login',send_body).then(response => {
+      if(response.status == 200){
         window.location.href = '/Certificate';
       }else{
         alert('Wrong Password');
       }
   }).catch(error =>{
+    alert('Wrong Password');
     console.log(error);
   });
     // console.log({
@@ -83,10 +83,10 @@ export default function SignIn() {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="account"
+              label="Account"
+              name="account"
+              autoComplete="account"
               autoFocus
             />
             <TextField

@@ -29,20 +29,6 @@ import axios from "axios";
 //   { field: "col2", headerName: "Column 2", width: 150 }
 // ];
 
-const rows = [
-  { id: 1, col1: "Hello", col2: "World" },
-  { id: 2, col1: "MUI X", col2: "is awesome" },
-  { id: 3, col1: "Material UI", col2: "is amazing" },
-  { id: 4, col1: "MUI", col2: "" },
-  { id: 5, col1: "Joy UI", col2: "is awesome" },
-  { id: 6, col1: "MUI Base", col2: "is amazing" }
-];
-
-const columns = [
-  { field: "id", hide: true },
-  { field: "col1", headerName: "Column 1", width: 150 },
-  { field: "col2", headerName: "Column 2", width: 150 }
-];
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -52,26 +38,90 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
   }));
 
-const config = {
-    baseURL: "https://diagnosis-back.host.chillmonkey.com.tw/api/patientAddresses",
-    // baseURL:"http://localhost:3000/testdata/test.json"
-}
+const client = axios.create({
+    baseURL: "https://diagnosis-back.host.chillmonkey.com.tw/api" 
+  });
 
 const theme = createTheme();
 export default function CertificateManagement(){
     const [patientAddress,setPatientAddress] = React.useState([]);
+    const [customFilter,setCustomFilter] = React.useState([]);
+    const [patientAddressKeyword,setPatientAddressKeyword] = React.useState('');
+    const [symptomsKeyword,setSymptomsKeyword] = React.useState('');
     const [loading,setLoading] = React.useState(true);
-    const [nowAccount,setNowAccount] = React.useState("123456");
+    const [addressList,setAddressList] = React.useState([])
+    const [nowAccount,setNowAccount] = React.useState("");
+    const [addressListRoom2,setAddressListRoom2] = React.useState([])
+    const [nowAccountRoom2,setNowAccountRoom2] = React.useState("");
     React.useEffect(() => {
-        axios(config).then(response => {
-            setPatientAddress(response.data.response.patient);
-            console.log(response.data.response.patient);
-            setLoading(false);
+        client.get('/medicalCertificates').then(response => {
+            setPatientAddress(response.data.data.medicalCertificatesList);
+            console.log(response.data.data.medicalCertificatesList);
         }).catch(error =>{
           console.log(error);
         });
       }, []);
 
+    React.useEffect(()=>{
+        client.get('/clinic/1').then(response=>{
+            setAddressList(address => [...address,response.data.data])
+        }).catch(error =>{
+            console.log(error);
+        });
+    },[])
+
+    React.useEffect(()=>{
+        client.get('/clinic/2').then(response=>{
+            setAddressListRoom2(address => [...address,response.data.data])
+        }).catch(error =>{
+            console.log(error);
+        });
+    },[])
+
+    React.useEffect(() =>{
+        console.log(addressList)
+        if(addressList.length != 0){
+            if(nowAccount == ""){
+                setNowAccount(addressList[0].patient)
+            }
+            else{
+                const nowpos = addressList.findIndex(obj=>obj.patient == nowAccount)
+                if(nowpos + 1 < addressList.length){
+                    setNowAccount(addressList[nowpos + 1].patient);
+                }
+                else{
+                    setNowAccount("")
+                }
+            }
+        }
+    },[addressList])
+
+    React.useEffect(() =>{
+        if(addressListRoom2.length != 0){
+            if(nowAccount == ""){
+                setNowAccountRoom2(addressListRoom2[0].patient)
+            }
+            else{
+                const nowpos = addressListRoom2.findIndex(obj=>obj.patient == nowAccountRoom2)
+                if(nowpos + 1 < addressListRoom2.length){
+                    setNowAccountRoom2(addressListRoom2[nowpos + 1].patient);
+                }
+                else{
+                    setNowAccountRoom2("")
+                }
+            }
+        }
+    },[addressListRoom2])
+
+    const setFilter = () =>{
+        setCustomFilter([])
+        if(patientAddressKeyword != ''){
+            setCustomFilter(custom=>[...custom,{id:0,columnField:'patientAddress',operatorValue: 'contains', value: patientAddressKeyword}])
+        }
+        if(symptomsKeyword != ''){
+            setCustomFilter(custom=>[...custom,{id:1,columnField:'symptoms',operatorValue: 'contains', value: symptomsKeyword}])
+        }
+    }
     return(
         <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="sx" sx={{ flexGrow: 1,boxShadow: 1, borderRadius: 2, backgroundColor: '#E0E0E0', p: 2}}>
@@ -90,27 +140,27 @@ export default function CertificateManagement(){
                     </Item> */}
                 </Grid>
                 <Grid item xs={12} container>
-                    <Grid item xs={9} container columnSpacing={6} sx={{backgroundColor: '#fff',boxShadow:1,borderRadius: 2,p:2,m:2}}>
+                    <Grid item xs={6} container columnSpacing={6} sx={{backgroundColor: '#fff',boxShadow:1,borderRadius: 2,p:2,m:2}}>
                         <Grid item xs = {6}>
-                            <TextField fullWidth id="Wallet Address" label="Wallet Address"/>
+                            <TextField fullWidth id="patientAddress" label="Patient Address" value={patientAddressKeyword} onChange={(newValue) => setPatientAddressKeyword(newValue.target.value)}/>
                         </Grid>
-                        <Grid item xs = {6}>
+                        {/* <Grid item xs = {6}>
                             <DateTimePicker></DateTimePicker>
-                        </Grid>
+                        </Grid> */}
                         <Grid item xs = {6}>
-                            <TextField fullWidth id="症狀" label="症狀"/>
+                            <TextField fullWidth id="symptoms" label="Symptoms" value={symptomsKeyword} onChange={(newValue) => setSymptomsKeyword(newValue.target.value)}/>
                         </Grid>
-                        <Grid item xs = {3}>
+                        {/* <Grid item xs = {3}>
                             <TextField fullWidth id="關鍵字" label="關鍵字"/>
-                        </Grid>
+                        </Grid> */}
                         <Grid item xs = {3}>
-                            <Button fullWidth variant="contained">Search</Button>
+                            <Button fullWidth variant="contained" onClick={setFilter}>Search</Button>
                         </Grid>
                     </Grid>
                     <Grid item xs container rowSpacing={3} sx={{backgroundColor: '#fff',boxShadow:1,borderRadius: 2,p:2,m:2,textAlign: 'center'}}>
                         <Grid item xs ={12}>
                             <Box component="h1" sx={{display:'block'}}>
-                                現在診間病人
+                                ROOM 1
                             </Box>
                         </Grid>
                         <Grid item xs ={12}>
@@ -122,10 +172,25 @@ export default function CertificateManagement(){
                             <Button fullWidth variant="contained" sx={{backgroundColor: 'red'}} href={`CreateCertificate/${nowAccount}`}>Create</Button>
                         </Grid>
                     </Grid>
+                    <Grid item xs container rowSpacing={3} sx={{backgroundColor: '#fff',boxShadow:1,borderRadius: 2,p:2,m:2,textAlign: 'center'}}>
+                        <Grid item xs ={12}>
+                            <Box component="h1" sx={{display:'block'}}>
+                                ROOM 2
+                            </Box>
+                        </Grid>
+                        <Grid item xs ={12}>
+                            <Box component="p"  sx={{display:'block'}}>
+                                {nowAccountRoom2}
+                            </Box>
+                        </Grid>
+                        <Grid item xs ={12}>
+                            <Button fullWidth variant="contained" sx={{backgroundColor: 'red'}} href={`CreateCertificate/${nowAccountRoom2}`}>Create</Button>
+                        </Grid>
+                    </Grid>
                 </Grid>
                 <Grid item xs={12} container>
-                    <Box sx={{flexGrow:1 ,boxShadow: 1,backgroundColor: '#fff',boxShadow:1,borderRadius: 2,p:2,m:2,}}>               
-                        <DataGridDemo></DataGridDemo>
+                    <Box sx={{flexGrow:1 ,boxShadow: 1,backgroundColor: '#fff',boxShadow:1,borderRadius: 2,p:2,m:2}}>               
+                        <DataGridDemo rows={patientAddress} filter ={customFilter}></DataGridDemo>
                     </Box>
                 </Grid>   
             </Grid>

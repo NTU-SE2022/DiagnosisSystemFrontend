@@ -13,9 +13,11 @@ import {useParams} from 'react-router-dom';
 import axios from 'axios';
 
 const config = {
-    // baseURL: "https://diagnosis-back.host.chillmonkey.com.tw/api/patientAddresses",
-    baseURL:"http://localhost:3000/testdata/testSymptom.json"
+    baseURL: "https://diagnosis-back.host.chillmonkey.com.tw/api/symptoms",
+    // baseURL:"http://localhost:3000/testdata/testSymptom.json"
 }
+
+
 export default function CreateCertificate(props){
     // state={
     //     content :{
@@ -37,7 +39,8 @@ export default function CreateCertificate(props){
     const [symptomList ,setSymptomList] = React.useState([])
     React.useEffect(() =>{
         axios(config).then((response) =>{
-            let data = response.data.response.symptom;
+            console.log(response)
+            let data = response.data.data.symptomsList;
             data.map((symptom) => symptom['level'] = "HEALTH");
             console.log(data);
             setSymptomList(data)

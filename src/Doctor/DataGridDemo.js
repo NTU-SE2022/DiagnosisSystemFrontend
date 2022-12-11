@@ -1,29 +1,24 @@
 import Button from '@mui/material/Button';
 import React, {Fragment} from "react";
-import { DataGrid, GridColDef, GridApi, GridCellValue } from '@mui/x-data-grid';
-
+import { DataGrid, GridColDef, GridApi, GridCellValue,GridToolbar  } from '@mui/x-data-grid';
+import OutCertificate from './Certificate';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 // const columns: GridColDef[] = [
+
+// const nav = useNavigate();
 const columns = [
-  { field: 'id', headerName: 'ID', width: 70 },
-  { field: 'walletAddress', headerName: 'Wallet address', flex:0.3 },
-  { field: 'date', headerName: 'Date', flex:0.3 },
-//   {
-//     field: 'age',
-//     headerName: 'Age',
-//     type: 'number',
-//     width: 90,
-//   },
+  { field: 'id', headerName: 'ID', flex:0.1 },
+  { field: 'patientAddress', headerName: 'Patient Address', flex:0.4 },
   {
-    field: 'symptom',
-    headerName: '症狀',
+    field: 'symptoms',
+    headerName: 'Symptom',
     flex:0.3,
-    // description: 'This column has a value getter and is not sortable.',
-    // sortable: false,
-    // width: 160,
-    // valueGetter: (params) =>
-    //   `${params.getValue(params.id, 'firstName') || ''} ${
-    //     params.getValue(params.id, 'lastName') || ''
-    //   }`,
+  },
+  {
+    field: 'levels',
+    headerName: 'Level',
+    hide:true,
   },
   {
     field: 'action',
@@ -31,6 +26,7 @@ const columns = [
     sortable: false,
     renderCell: (params) => {
       const onClick = (e) => {
+        // const nav = useNavigate();
         e.stopPropagation(); // don't select this row after clicking
 
         // const api: GridApi = params.api;
@@ -44,12 +40,23 @@ const columns = [
           .forEach(
             (c) => (thisRow[c.field] = params.getValue(params.id, c.field)),
           );
-              
+        console.log(thisRow)
+        // nav("/CertificateRecord", { state:data});
         // return alert(JSON.stringify(thisRow, null, 4));
-        return window.location.href = "CertificateRecord";
+        // return window.location.href = "CertificateRecord";
+        // return <Link to="/CertificateRecord" state={thisRow}></Link>
       };
-
-      return <Button onClick={onClick}>View</Button>;
+      const api = params.api;
+      const thisRow = {};
+      api
+      .getAllColumns()
+      .filter((c) => c.field !== '__check__' && !!c)
+      .forEach(
+        (c) => (thisRow[c.field] = params.getValue(params.id, c.field)),
+      );
+      console.log(thisRow)
+      return <Link to="/CertificateRecord" state={thisRow}>VIEW</Link>
+      // return <Button onClick={onClick}>View</Button>;
   },
   },
 ];
@@ -66,10 +73,19 @@ const rows = [
   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
 ];
 
-export default function DataGridDemo() {
+export default function DataGridDemo(props) {
+  let patientCertificate = props.rows
+  const customFilter = props.filter
+  // [
+  //   { id: 1, columnField: 'symptoms', operatorValue: 'contains', value: 'B' },
+  //   { id: 2, columnField: 'id', operatorValue: 'contains', value: 0 }
+  // ]
+  patientCertificate.map((elements,index)=>{
+    elements['id'] = index
+  });
   return (
     <div style={{ height: 400, width: '100%' }}>
-      <DataGrid rows={rows} columns={columns} pageSize={5}/>
+      <DataGrid rows={patientCertificate} columns={columns}  filterModel={{items: customFilter}}pageSize={5}/>
     </div>
   );
 }
