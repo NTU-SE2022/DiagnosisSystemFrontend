@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import { AuthContext } from '../Context/AuthProvider';
 import { useNavigate } from 'react-router-dom';
 export default function ButtonAppBar() {
-  const {setAuth} = React.useContext(AuthContext);
+  const {auth,setAuth} = React.useContext(AuthContext);
   const navigate = useNavigate();
   const logout =() =>{
     setAuth({'account':'','status':'logout'})
@@ -30,7 +30,7 @@ export default function ButtonAppBar() {
             Certificate Management
           </Typography>
           <Typography variant="p" component="div" sx={{ flexGrow: 1 ,textAlign: 'right',p:1}}>
-            {props.username}
+            {auth.account}
           </Typography>
           <Button color = "inherit" onClick={logout}>Sign Out</Button>
         </Toolbar>

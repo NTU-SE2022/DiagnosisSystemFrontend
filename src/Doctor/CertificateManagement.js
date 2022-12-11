@@ -186,7 +186,7 @@ export default function CertificateManagement(){
                             </Box>
                         </Grid>
                         <Grid item xs ={12}>
-                            <Button fullWidth variant="contained" sx={{backgroundColor: 'red'}} href={`CreateCertificate/1/${nowAccount}`} disabled={Boolean(nowAccount=="")}>Create</Button>
+                            <Button fullWidth variant="contained" sx={{backgroundColor: 'red'}} onClick={()=>{navigate(`/CreateCertificate/1/${nowAccount}`)}} disabled={Boolean(nowAccount=="")}>Create</Button>
                         </Grid>
                     </Grid>
                     <Grid item xs container rowSpacing={3} sx={{backgroundColor: '#fff',boxShadow:1,borderRadius: 2,p:2,m:2,textAlign: 'center'}}>
@@ -201,7 +201,7 @@ export default function CertificateManagement(){
                             </Box>
                         </Grid>
                         <Grid item xs ={12}>
-                            <Button fullWidth variant="contained" sx={{backgroundColor: 'red'}} href={`CreateCertificate/2/${nowAccountRoom2}`} disabled={Boolean(nowAccountRoom2=="")}>Create</Button>
+                            <Button fullWidth variant="contained" sx={{backgroundColor: 'red'}} onClick={()=>{navigate(`/CreateCertificate/2/${nowAccountRoom2}`)}} disabled={Boolean(nowAccountRoom2=="")}>Create</Button>
                         </Grid>
                     </Grid>
                 </Grid>

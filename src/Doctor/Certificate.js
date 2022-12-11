@@ -29,7 +29,6 @@ export default function OutCertificate(props){
     // }
     const content = location.state;
     const levels = content.levels.split(',')
-    console.log(content)
     return(
         <React.Fragment>
             <ButtonAppBar></ButtonAppBar>
@@ -43,7 +42,7 @@ export default function OutCertificate(props){
             ))}</Typography>
             </Box>
             <Box sx={{textAlign:'right',p:2}}>
-                <Button href='Certificate'>Back</Button>
+            <Link to='/Certificate'>Back</Link>
             </Box>
             
         </React.Fragment>

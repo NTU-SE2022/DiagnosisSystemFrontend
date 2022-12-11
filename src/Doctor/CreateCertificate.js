@@ -11,7 +11,7 @@ import CreateCertificateButton from './CreateCertifiacteButton';
 import Grid from '@mui/material/Unstable_Grid2';
 import {useParams} from 'react-router-dom';
 import axios from 'axios';
-
+import { useLocation, Link } from "react-router-dom";
 const config = {
     baseURL: "https://diagnosis-back.host.chillmonkey.com.tw/api/symptoms",
     // baseURL:"http://localhost:3000/testdata/testSymptom.json"
@@ -97,7 +97,7 @@ export default function CreateCertificate(props){
 
                         {/* <Button href='Certificate'>Save</Button> */}
                         <CreateCertificateButton room={room} account={account} hasSymptoms={hasSymptom} allSymptoms={symptomList}></CreateCertificateButton>
-                        <Button href='/Certificate'>Back</Button>
+                        <Button variant="outlined"><Link to='/Certificate'>Back</Link></Button>
                     </Box>
                 </Grid> 
             </Grid>
@@ -105,10 +105,13 @@ export default function CreateCertificate(props){
             <Box component="div" sx={{ display: 'flex',flexDirection: 'row'}}>
                 <ComboBox id = '1' value={symptomList} Change={handleCheck}></ComboBox>
                 <Button onClick={()=>AddSymptom(nowSymptom)}>Add Symptom</Button>
+                
             </Box>
             {/* <Button onClick={AddSymptom}>Add  Symptom</Button> */}
             <SymptomGroup value={hasSymptom} onDelete={DeleteSymptom} onUpdate={UpdateSymptomLevel}></SymptomGroup>
+            
             </Box>
+            
         </React.Fragment>
     );
 }

@@ -54,7 +54,6 @@ const columns = [
       .forEach(
         (c) => (thisRow[c.field] = params.getValue(params.id, c.field)),
       );
-      console.log(thisRow)
       return <Link to="/CertificateRecord" state={thisRow}>VIEW</Link>
       // return <Button onClick={onClick}>View</Button>;
   },
