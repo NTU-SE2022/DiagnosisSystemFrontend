@@ -31,7 +31,7 @@ const App = () =>{
     return(
         <Provider store={store}>
             <userWallet.Provider value={useEthereum()}>
-                <backendInfo.Provider value={{baseURL: "http://diagnosis-back.host.chillmonkey.com.tw/api/", ContractAddress: "0xe02401b8b4d84189d0c013e9e20b2c87a33a5881"}}>
+                <backendInfo.Provider value={{baseURL: "http://diagnosis-back.host.chillmonkey.com.tw/api/", ContractAddress: "0x448f50b88d03b434cee1b7febf9f6cad51983565"}}>
                     <Router>
                         <Routes>
                             <Route exact path="/" element={<Diagnosis />}/>
