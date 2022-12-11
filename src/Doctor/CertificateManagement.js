@@ -14,6 +14,7 @@ import { Button } from '@mui/material';
 import DataGridDemo from './DataGridDemo';
 import ButtonAppBar from './AppBar';
 import axios from "axios";
+import AuthContext from '../Context/AuthProvider';
 // const rows: GridRowsProp = [
 //   { id: 1, col1: "Hello", col2: "World" },
 //   { id: 2, col1: "MUI X", col2: "is awesome" },
@@ -44,6 +45,7 @@ const client = axios.create({
 
 const theme = createTheme();
 export default function CertificateManagement(){
+    // const {auth} = React.useContext(AuthContext);
     const [patientAddress,setPatientAddress] = React.useState([]);
     const [customFilter,setCustomFilter] = React.useState([]);
     const [patientAddressKeyword,setPatientAddressKeyword] = React.useState('');
@@ -53,6 +55,11 @@ export default function CertificateManagement(){
     const [nowAccount,setNowAccount] = React.useState("");
     const [addressListRoom2,setAddressListRoom2] = React.useState([])
     const [nowAccountRoom2,setNowAccountRoom2] = React.useState("");
+    // console.log(auth)
+    // if(!auth){
+    //     // alert('尚未登入')
+    //     // window.location.href='/SignIn'
+    // }
     React.useEffect(() => {
         client.get('/medicalCertificates').then(response => {
             setPatientAddress(response.data.data.medicalCertificatesList);
@@ -184,7 +191,7 @@ export default function CertificateManagement(){
                             </Box>
                         </Grid>
                         <Grid item xs ={12}>
-                            <Button fullWidth variant="contained" sx={{backgroundColor: 'red'}} href={`CreateCertificate/2/${nowAccount}`}>Create</Button>
+                            <Button fullWidth variant="contained" sx={{backgroundColor: 'red'}} href={`CreateCertificate/2/${nowAccountRoom2}`}>Create</Button>
                         </Grid>
                     </Grid>
                 </Grid>
