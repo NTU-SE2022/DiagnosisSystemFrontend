@@ -16,7 +16,7 @@ import {Stack} from '@mui/material';
 import PropTypes from 'prop-types';
 import { userWallet } from '..';
 import axios from "axios";
-import { AllMedicalCertificate, ContractImplementation, MedicalCertificate } from '../store/MedicalCertificate';
+import { AllMedicalCertificate, MedicalCertificate } from '../store/MedicalCertificate';
 
 
 
@@ -41,24 +41,31 @@ export default function PatientCertificateManagement(){
     } = React.useContext(userWallet);
 
     const pageCount = 2;
-    const [page, setPage] = React.useState(1);
-    // TODO: get all patient certificates
-    const [allCertificateId, setallCertificateId] = React.useState<string[]>([]);
-    const [allCertificate, setallCertificate] = React.useState<JSX.Element[]>([]);
     const [pageNum,setpageNum] = React.useState(1);
-    const testFunc: MedicalCertificate[] = ContractImplementation({address:"0xe02401b8b4d84189d0c013e9e20b2c87a33a5881",patient:accounts[0]});
+    const allCertificate: MedicalCertificate[] = AllMedicalCertificate();
+    const [showCertificate, setshowCertificate] = React.useState<MedicalCertificate[]>(allCertificate);
+    const [refresh, setrefresh] = React.useState(false);
+    const [symptoms, setsymptoms] = React.useState('');
+    const [levels, setlevels] = React.useState('');
+    const [search, setsearch] = React.useState(false);
 
+    React.useEffect(()=>{
+        setshowCertificate(allCertificate);
+    }, [allCertificate.length, refresh])
+    
+    const Search = () => {
+        setsearch(true);
+        setshowCertificate(allCertificate.filter((certificate: MedicalCertificate) => certificate.symptoms.toLowerCase().includes(symptoms.toLowerCase())));
+        setshowCertificate(certificates => certificates.filter((certificate: MedicalCertificate) => certificate.levels.includes(levels)));
+        setsearch(false);
+    }
 
-    // React.useEffect(() => {
-    //     setallCertificateId(["0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"]);
-    //     // setallCertificate(AllMedicalCertificate({address:"0xe02401b8b4d84189d0c013e9e20b2c87a33a5881",ids:test(),patientAddress:accounts}));
-    // }, []);
-    
-    // console.log(showMedicalRecord)
-    
+    // console.log(showCertificate);
     const handleChange = (event:any, value:any) => {
         setpageNum(value);
+        setrefresh(true);
     };
+
     return(
         <ThemeProvider theme={theme}>
             <Container>
@@ -67,27 +74,23 @@ export default function PatientCertificateManagement(){
                 <Grid xs={12}>
                     <Item><ButtonAppBar title="Certificate Management" username={accounts}></ButtonAppBar></Item>
                 </Grid>
-                <Grid xs = {6} sx={{textAlign:'center'}}>
-                    <DateTimePicker fullWidth></DateTimePicker>
+                <Grid xs = {5} sx={{textAlign:'center'}}>
+                    <TextField fullWidth id="Symptom" label="Symptom" onChange = {(ev) => {setsymptoms(ev.target.value)}}/>
                 </Grid>
-                <Grid xs = {6} sx={{textAlign:'center'}}>
-                    <TextField fullWidth id="Symptom" label="Symptom"/>
+                <Grid xs = {5} sx={{textAlign:'center'}}>
+                    <TextField fullWidth id="SeverityScale" label="Severity scale (0~3)" onChange = {(ev) => {setlevels(ev.target.value)}}/>
                 </Grid>
-                <Grid xs = {6} sx={{textAlign:'center'}}>
-                    <TextField fullWidth id="Key Word" label="Key Word"/>
-                </Grid>
-                <Grid xs = {6} sx={{textAlign:'center',height:'100%'}}>
-                    <Button variant="contained">Search</Button>
+                <Grid sx={{textAlign:'center', height:'100%'}}>
+                    <Button variant="contained" disabled={search} onClick={Search} >Search</Button>
                 </Grid>
                 <Grid xs={12}>
                     <Box sx={{display: 'flex',flexDirection: 'row',p: 1,m: 1,bgcolor: 'background.paper',borderRadius: 1,justifyContent: 'flex-start'}}>
-                        { testFunc.slice((pageNum-1)*pageCount,pageNum*pageCount).map((certificate) => <BorderBox value={{id:certificate.id,address:certificate.address,symptoms:certificate.symptoms,levels:certificate.levels}} onclick ={()=>{}} />) }
-                        {/* { AllMedicalCertificate({address:"0xe02401b8b4d84189d0c013e9e20b2c87a33a5881",ids:allCertificateId.slice((pageNum-1)*pageCount,pageNum*pageCount),patientAddress:accounts}) } */}
+                        { showCertificate.slice((pageNum-1)*pageCount,pageNum*pageCount).map((certificate) => <BorderBox value={{id:certificate.id,address:certificate.address,symptoms:certificate.symptoms,levels:certificate.levels}} onclick ={()=>{}} />) }
                     </Box>
                 </Grid>
                 <Grid xs={12}>
                     <Stack alignItems="center">
-                    <Pagination count={Math.ceil(testFunc.length/pageCount)} variant="outlined" onChange={handleChange} shape="rounded" sx={{margin: "auto"}}/>
+                        <Pagination count={Math.ceil(showCertificate.length/pageCount)} variant="outlined" onChange={handleChange} shape="rounded" sx={{margin: "auto"}}/>
                     </Stack>
                 </Grid>
             </Grid>
@@ -113,8 +116,6 @@ function BorderBox(props:any){
         m: 1,
         borderRadius: 2,
         textAlign: 'center',
-        // fontSize: '0.875rem',
-        // fontWeight: '700',
         }}
         >
             <BorderBoxContent value={props.value}/>
@@ -123,18 +124,37 @@ function BorderBox(props:any){
 }
 
 function BorderBoxContent(props:any){
+    const symptoms: string[] = props.value.symptoms.split(',');
+    const levels: string[] = props.value.levels.split(',');
+    var colors: {[index: string]:string} = {};
+    colors['0'] = 'success.dark';
+    colors['1'] = 'info.dark';
+    colors['2'] = 'warning.dark';
+    colors['3'] = 'error.dark';
+
+    var levelDescriptions:{[index: string]:string} = {
+        '0': '(No problem, 0)',
+        '1': '(Mild, 1)',
+        '2': '(Moderate, 2)',
+        '3': '(Severe, 3)',
+    }
+
     return(
         <Box flex={1} sx={{height:'100%',textAlign:'left' ,overflow:"auto"}}>
-        <Box component="span" sx={{ display: 'block' }}>
-            <Box sx={{ color: 'text.primary', fontsize:15, fontweight: 'bold', display: 'inline',}}>Certificate ID: </Box>
-            <Box sx={{ color: 'secondary.dark', fontsize:15, display: 'inline',}}>{props.value.id}</Box>
+        <Box component="h4" sx={{ display: 'block', fontweight: 'bold'}}>
+            <Box sx={{ color: 'text.primary', display: 'inline',}}>Certificate ID: </Box>
+            <Box sx={{ color: 'secondary.dark', display: 'inline',}}>{props.value.id}</Box>
         </Box>
-        <Box component="span" sx={{ display: 'block' }}>
-            <Box sx={{ color: 'text.primary', fontsize:15, fontweight: 'bold', display: 'inline',}}>Patient address: {props.value.address}</Box>
+        {/* <Box component="p" sx={{ display: 'block' }}>
+            <Box sx={{ color: 'text.primary', fontsize:15, fontweight: 'bold', display: 'inline',}}>Patient: {props.value.address}</Box>
             <Box sx={{ color: 'secondary.dark', fontsize:10, display: 'inline',}}>{props.value.id}</Box>
+        </Box> */}
+        <Box component="h4" sx={{ color: 'text.primary', fontsize:40, fontweight:'bold'}}>Symptoms:</Box>
+        <Box component="h6" sx={{display: 'block'}}>
+            {symptoms.map(function(e,i){return <Box sx={{display: 'block', color:colors[levels[i]]}}>{e} {levelDescriptions[levels[i]]}</Box>})}
         </Box>
-        <Box component="p">symptoms:{props.value.symptoms}</Box>
-        <Box component="p">levels:{props.value.levels}</Box>
+        {/* <Box component="p">symptoms:{props.value.symptoms}</Box>
+        <Box component="p">levels:{props.value.levels}</Box> */}
         {/* <Box component="p">Category:{props.value.category}</Box>
         <Box component='p'>Feature:{props.value.feature.map((policy=>(<Box component='li'>{policy}</Box>)))}</Box>
         <Box component='p'>Coverage:{props.value.coverage.map((policy=>(<Box component='li'>{policy}</Box>)))}</Box> */}

@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from "axios";
 
 function Copyright(props) {
   return (
@@ -26,17 +27,37 @@ function Copyright(props) {
   );
 }
 
+
+
+
+
 const theme = createTheme();
 
 export default function SignIn() {
+
+  const client = axios.create({
+    baseURL: "https://diagnosis-back.host.chillmonkey.com.tw/api" 
+  });
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-    window.location.href = '/Certificate';
+    const send_body = {account:data.get('account'),password:data.get('password')}
+    client.post('/login',send_body).then(response => {
+      if(response.status == 200){
+        window.location.href = '/Certificate';
+      }else{
+        alert('Wrong Password');
+      }
+  }).catch(error =>{
+    alert('Wrong Password');
+    console.log(error);
+  });
+    // console.log({
+    //   email: data.get('email'),
+    //   password: data.get('password'),
+    // });
+    
   };
 
   return (
@@ -62,10 +83,10 @@ export default function SignIn() {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="account"
+              label="Account"
+              name="account"
+              autoComplete="account"
               autoFocus
             />
             <TextField

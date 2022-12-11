@@ -1,0 +1,13 @@
+{
+    "status": 200,
+    "response": {
+        "symptom": [
+            {
+                "name": "Acute cerebrovascular disease"
+            },
+            {
+                "name": "Burning"
+            }
+        ]
+    }
+}
