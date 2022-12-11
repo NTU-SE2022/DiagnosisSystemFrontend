@@ -22,34 +22,43 @@ export default function CreateCertificateButton(props) {
         symptoms:symptom,
         levels:level
       }
-      let samePatient = true
+      if(props.hasSymptoms.length == 0){
+        setOpen(true);
+        setContext("病症為空白無法發送");
+        return
+      }
       setOpen(true);
       setContext("生成及發送 NFT 至病人錢包中...");
       client.get(`/clinic/${props.room}`).then(response =>{
         if(response.data.status == 200){
-          if(response.data.data.patient != props.account){
-            alert('病人已離開診間，無法發送診斷證明');
+          if(response.data.data.patient == props.account){
             client.post('/createMedicalCertificate',send_body).then(response => {
               if(response.data.status == 201){
                 setContext("發送完成");
               }else{
                 setContext("發送失敗");
               }
+            }).catch(error =>{
+              console.log(error);
+              setContext("發送失敗");
             })
+          }else{
+            alert('病人已離開診間，無法發送診斷證明');
           }
         }
       })
 
-      client.put(`/createMedicalCertificate/${props.room}/${props.account}`,send_body).then(response => {
+      client.put(`/clinic/${props.room}/none`).then(response => {
         if(response.data.status == 201){
           setContext("結束診斷")
+          window.location.href='/Certificate'
         }else{
-          setContext("發送失敗")
+          setContext("診斷失敗")
         }
-    }).catch(error =>{
-      console.log(error);
-      setContext("發送失敗");
-    });
+      }).catch(error =>{
+        console.log(error);
+        setContext("診斷失敗");
+      });
     // setOpen(true);
     // setContext("生成及發送 NFT 至病人錢包中...");
     // setTimeout(() => {
@@ -86,15 +95,19 @@ function setSymptomAndLevel(allSymptoms,hasSymptoms){
 
   let symptom ="";
   let level = "";
-  allSymptoms.forEach(element => {
-    symptom = symptom.concat(',',element.name)
-    if(hasSymptoms.some((s => s.name == element.name))){
-      const hasSymptom = hasSymptoms.filter(s => s.name == element.name)
-      level = level.concat(',',transLevel(hasSymptom[0].level))
-    }else{
-      level = level.concat(',',transLevel(element.level))
-    }
+  // allSymptoms.forEach(element => {
+  //   symptom = symptom.concat(',',element.name)
+  //   if(hasSymptoms.some((s => s.name == element.name))){
+  //     const hasSymptom = hasSymptoms.filter(s => s.name == element.name)
+  //     level = level.concat(',',transLevel(hasSymptom[0].level))
+  //   }else{
+  //     level = level.concat(',',transLevel(element.level))
+  //   }
     
+  // });
+  hasSymptoms.forEach(element => {
+    symptom = symptom.concat(',',element.name);
+    level = level.concat(',',transLevel(element.level));
   });
   level = level.substring(1)
   symptom = symptom.substring(1)
