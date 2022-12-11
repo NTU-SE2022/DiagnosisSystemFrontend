@@ -131,13 +131,14 @@ export default function CertificateManagement(){
             setCustomFilter(custom=>[...custom,{id:1,columnField:'symptoms',operatorValue: 'contains', value: symptomsKeyword}])
         }
     }
+    console.log(auth['account'])
     return(
         <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="sx" sx={{ flexGrow: 1,boxShadow: 1, borderRadius: 2, backgroundColor: '#E0E0E0', p: 2}}>
             <CssBaseline />
             <Grid container rowSpacing={6} >
                 <Grid item xs={12} >
-                    <Item><ButtonAppBar username="王大美" ></ButtonAppBar></Item>
+                    <Item><ButtonAppBar username={auth['account']} ></ButtonAppBar></Item>
                     {/* <Item>
                         <Box sx={{position: 'relative',textAlign: 'center' }}>
                             <h1>Certificate Management</h1>
