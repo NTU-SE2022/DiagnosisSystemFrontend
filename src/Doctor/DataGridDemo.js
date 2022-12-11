@@ -1,9 +1,11 @@
 import Button from '@mui/material/Button';
 import React, {Fragment} from "react";
-import { DataGrid, GridColDef, GridApi, GridCellValue,GridToolbar  } from '@mui/x-data-grid';
+import { DataGridPro, GridColDef, GridApi, GridCellValue,GridToolbar  } from '@mui/x-data-grid-pro';
 import OutCertificate from './Certificate';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { GridLinkOperator } from '@mui/x-data-grid';
+import { GridFilterModel } from '@mui/x-data-grid';
 // const columns: GridColDef[] = [
 
 // const nav = useNavigate();
@@ -84,7 +86,7 @@ export default function DataGridDemo(props) {
   });
   return (
     <div style={{ height: 400, width: '100%' }}>
-      <DataGrid rows={patientCertificate} columns={columns}  filterModel={{items: customFilter}}pageSize={5}/>
+      <DataGridPro rows={patientCertificate} columns={columns}  filterModel={{items: customFilter,linkOperator: GridLinkOperator.And,}}pageSize={5}/>
     </div>
   );
 }

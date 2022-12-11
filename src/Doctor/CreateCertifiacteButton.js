@@ -13,10 +13,10 @@ export default function CreateCertificateButton(props) {
   const client = axios.create({
     baseURL: "https://diagnosis-back.host.chillmonkey.com.tw/api" 
   });
-
+  const navigate = useNavigate();
   const handleClickOpen = () => {
       const {symptom,level} = setSymptomAndLevel(props.allSymptoms,props.hasSymptoms)
-      const navigate = useNavigate();
+      
       const send_body = {
         patientAddress:props.account,
         // patientAddress:'0xA6023C4C2527604Dd4Cb7F915d2a1194aa909D4A',
@@ -52,7 +52,6 @@ export default function CreateCertificateButton(props) {
       client.put(`/clinic/${props.room}/none`).then(response => {
         if(response.data.status == 201){
           setContext("結束診斷")
-
           navigate('/Certificate')
         }else{
           setContext("診斷失敗")
