@@ -106,13 +106,16 @@ export default function EnterRoomButton(props){
             settitle("Successful")
             setcontent("You have entered the clinic room no." + value)
           }else{
-            settitle("Failed")
-            setcontent("The clinic room no." + value + " is full!")
+            console.log("Unexpected status!")
           }
-          setopenPopup(true)
         })
-        .catch((error) => console.log("clinic error: " + error))
-    }
+        .catch((error) => {
+          console.log("clinic error: " + error)
+          settitle("Failed")
+          setcontent("The clinic room no." + value + " is full!")
+        })
+        setopenPopup(true)
+      }
     setOpen(false);
   };
 
