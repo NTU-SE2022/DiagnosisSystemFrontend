@@ -26,11 +26,14 @@ export const userWallet = React.createContext()
 
 export const backendInfo = React.createContext()
 
+export const AuthContext = React.createContext({auth:{}, setAuth:()=>{}})
 const App = () =>{
+    const [auth, setAuth] = React.useState({});
     return(
         <Provider store={store}>
             <userWallet.Provider value={useEthereum()}>
                 <backendInfo.Provider value={{baseURL: "https://diagnosis-back.host.chillmonkey.com.tw/api", ContractAddress: "0x448f50b88d03b434cee1b7febf9f6cad51983565"}}>
+                    <AuthContext.Provider value={{ auth, setAuth }}>                   
                     <Router>
                         <Routes>
                             <Route exact path="/" element={<Diagnosis />}/>
@@ -41,11 +44,15 @@ const App = () =>{
                             <Route exact path="/CreateCertificate/:room/:account" element={<CreateCertificate/>}/>
                         </Routes>
                     </Router>
+                    </AuthContext.Provider>
                 </backendInfo.Provider>
             </userWallet.Provider> 
         </Provider>
     )  
 };
+
+
+
 
 
 ReactDOM.createRoot(document.querySelector("#root")).render(
