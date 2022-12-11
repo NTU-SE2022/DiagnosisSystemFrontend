@@ -5,11 +5,15 @@ import abijson from '../WEB3/MedicalCertificateAbi.json';
 import Box from '@mui/material/Box';
 import ContractActions from '../WEB3/ContractActions'
 
+export interface Symptom{
+    symptom: string;
+    level: string;
+}
+
 export interface MedicalCertificate {
     id: string;
     address: string;
-    symptoms: string;
-    levels: string;
+    symptoms: Symptom[];
 }
 
 interface ContractCallParam {
@@ -52,8 +56,8 @@ export function AllMedicalCertificate() {
         }
     }, [connect])
     
-    const [allSymptoms, setallSymptoms] = React.useState<string[]>([]);
-    const [allLevels, setallLevels] = React.useState<string[]>([]);
+    const [allSymptoms, setallSymptoms] = React.useState<string[][]>([]);
+    const [allLevels, setallLevels] = React.useState<string[][]>([]);
     const [allCertificateId, setallCertificateId] = React.useState<string[]>([]);
 
     React.useEffect(()=>{
@@ -65,7 +69,7 @@ export function AllMedicalCertificate() {
             method: 'getSymptoms',
             param: [id],
             callback: (res) => {
-                setallSymptoms(arr => [...arr, res]);
+                setallSymptoms(arr => [...arr, res.split(',')]);
             }
         });
     }
@@ -75,7 +79,7 @@ export function AllMedicalCertificate() {
             method: 'getLevels',
             param: [id],
             callback: (res) => {
-                setallLevels(arr => [...arr, res]);
+                setallLevels(arr => [...arr, res.split(',')]);
             }
         });
     }
@@ -92,7 +96,7 @@ export function AllMedicalCertificate() {
     
     if (allCertificateId.length > 0 && allCertificateId.length == allSymptoms.length && allCertificateId.length == allLevels.length){
         return allCertificateId.map<MedicalCertificate>(function(e,i){
-            return {id:e,address:accounts[0],symptoms:allSymptoms[i],levels:allLevels[i]}
+            return {id:e,address:accounts[0],symptoms:allSymptoms[i].map<Symptom>(function(e,j){ return {symptom:e, level:allLevels[i][j]}})}
         })
     }
 
