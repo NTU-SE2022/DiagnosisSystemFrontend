@@ -135,7 +135,7 @@ export default function CertificateManagement(){
             <CssBaseline />
             <Grid container rowSpacing={6} >
                 <Grid item xs={12} >
-                    <Item><ButtonAppBar></ButtonAppBar></Item>
+                    <Item><ButtonAppBar username="王大美" ></ButtonAppBar></Item>
                     {/* <Item>
                         <Box sx={{position: 'relative',textAlign: 'center' }}>
                             <h1>Certificate Management</h1>

@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import AuthContext from '../Context/AuthProvider';
-export default function ButtonAppBar() {
+export default function ButtonAppBar(props) {
   // const {setLogin} = React.useContext(AuthContext);
   return (
     <Box sx={{ flexGrow: 2 ,boxShadow: 1,borderRadius:2}}>
@@ -26,7 +26,7 @@ export default function ButtonAppBar() {
             Certificate Management
           </Typography>
           <Typography variant="p" component="div" sx={{ flexGrow: 1 ,textAlign: 'right',p:1}}>
-            王大美
+            {props.username}
           </Typography>
           <Button color = "inherit" href = "SignIn">Sign Out</Button>
         </Toolbar>
