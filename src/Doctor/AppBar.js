@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { AuthContext } from '../Context/AuthProvider';
 import { useNavigate } from 'react-router-dom';
-export default function ButtonAppBar() {
+export default function ButtonAppBar(props) {
   const {setAuth} = React.useContext(AuthContext);
   const navigate = useNavigate();
   const logout =() =>{
