@@ -22,12 +22,27 @@ export default function CreateCertificateButton(props) {
         symptoms:symptom,
         levels:level
       }
+      let samePatient = true
       setOpen(true);
       setContext("生成及發送 NFT 至病人錢包中...");
-      client.post('/createMedicalCertificate',send_body).then(response => {
-        console.log(response)
+      client.get(`/clinic/${props.room}`).then(response =>{
+        if(response.data.status == 200){
+          if(response.data.data.patient != props.account){
+            alert('病人已離開診間，無法發送診斷證明');
+            client.post('/createMedicalCertificate',send_body).then(response => {
+              if(response.data.status == 201){
+                setContext("發送完成");
+              }else{
+                setContext("發送失敗");
+              }
+            })
+          }
+        }
+      })
+
+      client.put(`/createMedicalCertificate/${props.room}/${props.account}`,send_body).then(response => {
         if(response.data.status == 201){
-          setContext("發送完成")
+          setContext("結束診斷")
         }else{
           setContext("發送失敗")
         }

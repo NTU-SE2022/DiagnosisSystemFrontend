@@ -34,7 +34,7 @@ export default function CreateCertificate(props){
     //     ],
     //     temp:'1',
     // };
-    let { account } = useParams();
+    let { account,room } = useParams();
     let content = props.content;
     const [symptomList ,setSymptomList] = React.useState([])
     React.useEffect(() =>{
@@ -42,7 +42,6 @@ export default function CreateCertificate(props){
             console.log(response)
             let data = response.data.data.symptomsList;
             data.map((symptom) => symptom['level'] = "HEALTH");
-            console.log(data);
             setSymptomList(data)
         }).catch((error)=>{
             console.log(error);
@@ -97,7 +96,7 @@ export default function CreateCertificate(props){
                     <Box sx={{display: 'flex',justifyContent: 'flex-end',textAlign:'right'}}>
 
                         {/* <Button href='Certificate'>Save</Button> */}
-                        <CreateCertificateButton account={account} hasSymptoms={hasSymptom} allSymptoms={symptomList}></CreateCertificateButton>
+                        <CreateCertificateButton room={room} account={account} hasSymptoms={hasSymptom} allSymptoms={symptomList}></CreateCertificateButton>
                         <Button href='/Certificate'>Back</Button>
                     </Box>
                 </Grid> 

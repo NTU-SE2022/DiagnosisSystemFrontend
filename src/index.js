@@ -40,7 +40,7 @@ const App = () =>{
                             <Route exact path="/Certificate" element={<CertificateManagement/>}/>
                             <Route exact path="/PatientCertificate" element={<PatientCertificateManagement/>}/>
                             <Route exact path="/CertificateRecord" element={<OutCertificate/>}/>
-                            <Route exact path="/CreateCertificate" element={<CreateCertificate/>}/>
+                            <Route exact path="/CreateCertificate/:room/:account" element={<CreateCertificate/>}/>
                         </Routes>
                     </Router>
                 </backendInfo.Provider>
