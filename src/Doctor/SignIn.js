@@ -52,7 +52,7 @@ export default function SignIn() {
     client.post('/login',send_body).then(response => {
       console.log(response);
       if(response.status == 200){
-        setAuth({'account':send_body.account});
+        setAuth({'account':send_body.account,'status':'login'});
         navigate('/Certificate');
       }else{
         alert('Wrong Password');

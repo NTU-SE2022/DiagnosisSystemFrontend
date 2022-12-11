@@ -15,6 +15,8 @@ import DataGridDemo from './DataGridDemo';
 import ButtonAppBar from './AppBar';
 import axios from "axios";
 import { AuthContext } from '../Context/AuthProvider';
+import { useNavigate } from 'react-router-dom';
+
 // const rows: GridRowsProp = [
 //   { id: 1, col1: "Hello", col2: "World" },
 //   { id: 2, col1: "MUI X", col2: "is awesome" },
@@ -45,6 +47,7 @@ const client = axios.create({
 
 const theme = createTheme();
 export default function CertificateManagement(){
+    const navigate = useNavigate();
     const {auth} = React.useContext(AuthContext);
     const [patientAddress,setPatientAddress] = React.useState([]);
     const [customFilter,setCustomFilter] = React.useState([]);
@@ -61,10 +64,10 @@ export default function CertificateManagement(){
         console.log('=========================');
     },[auth])
 
-    // if(!auth){
-    //     // alert('尚未登入')
-    //     // window.location.href='/SignIn'
-    // }
+    if(auth.status != 'login'){
+        alert('尚未登入')
+        navigate('/SignIn')
+    }
 
     React.useEffect(() => {
         client.get('/medicalCertificates').then(response => {
