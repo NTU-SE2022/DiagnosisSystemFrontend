@@ -4,11 +4,15 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import AuthContext from '../Context/AuthProvider';
-export default function ButtonAppBar(props) {
-  // const {setLogin} = React.useContext(AuthContext);
+import { AuthContext } from '../Context/AuthProvider';
+import { useNavigate } from 'react-router-dom';
+export default function ButtonAppBar() {
+  const {setAuth} = React.useContext(AuthContext);
+  const navigate = useNavigate();
+  const logout =() =>{
+    setAuth({'account':'','status':'logout'})
+    navigate('/SignIn')
+  }
   return (
     <Box sx={{ flexGrow: 2 ,boxShadow: 1,borderRadius:2}}>
       <AppBar position="static">
@@ -28,7 +32,7 @@ export default function ButtonAppBar(props) {
           <Typography variant="p" component="div" sx={{ flexGrow: 1 ,textAlign: 'right',p:1}}>
             {props.username}
           </Typography>
-          <Button color = "inherit" href = "SignIn">Sign Out</Button>
+          <Button color = "inherit" onClick={logout}>Sign Out</Button>
         </Toolbar>
       </AppBar>
     </Box>

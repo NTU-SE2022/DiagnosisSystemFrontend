@@ -12,8 +12,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { AuthContext } from '..';
+import { AuthContext } from '../Context/AuthProvider';
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 function Copyright(props) {
   return (
@@ -40,7 +41,8 @@ export default function SignIn() {
     baseURL: "https://diagnosis-back.host.chillmonkey.com.tw/api" 
   });
 
-  const {auth,setAuth} = React.useContext(AuthContext)
+  const {auth,setAuth} = React.useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -50,8 +52,8 @@ export default function SignIn() {
     client.post('/login',send_body).then(response => {
       console.log(response);
       if(response.status == 200){
-        setAuth({'account':send_body.account})
-        window.location.href = '/Certificate';
+        setAuth({'account':send_body.account,'status':'login'});
+        navigate('/Certificate');
       }else{
         alert('Wrong Password');
       }
@@ -62,10 +64,6 @@ export default function SignIn() {
     
   );    
 };
-
-  React.useEffect(()=>{
-    setAuth({'account':123})
-  },[])
   
 
   return (

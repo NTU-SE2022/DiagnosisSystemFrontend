@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import axios from "axios";
-
+import { useNavigate } from 'react-router-dom';
 export default function CreateCertificateButton(props) {
   const [open, setOpen] = React.useState(false);
   const [context,setContext] =React.useState("生成及發送 NFT 至病人錢包中...")
@@ -16,9 +16,10 @@ export default function CreateCertificateButton(props) {
 
   const handleClickOpen = () => {
       const {symptom,level} = setSymptomAndLevel(props.allSymptoms,props.hasSymptoms)
+      const navigate = useNavigate();
       const send_body = {
-        // patientAddress:props.account,
-        patientAddress:'0xA6023C4C2527604Dd4Cb7F915d2a1194aa909D4A',
+        patientAddress:props.account,
+        // patientAddress:'0xA6023C4C2527604Dd4Cb7F915d2a1194aa909D4A',
         symptoms:symptom,
         levels:level
       }
@@ -51,7 +52,8 @@ export default function CreateCertificateButton(props) {
       client.put(`/clinic/${props.room}/none`).then(response => {
         if(response.data.status == 201){
           setContext("結束診斷")
-          window.location.href='/Certificate'
+
+          navigate('/Certificate')
         }else{
           setContext("診斷失敗")
         }
