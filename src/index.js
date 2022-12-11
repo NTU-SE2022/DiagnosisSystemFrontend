@@ -8,7 +8,6 @@ import SignIn from './Doctor/SignIn';
 import CertificateManagement from "./Doctor/CertificateManagement";
 import OutCertificate from "./Doctor/Certificate";
 import CreateCertificate from  "./Doctor/CreateCertificate";
-import SymptomList from "./Doctor/SymptomList";
 import PatientCertificateManagement from "./Patient/PatientCertificateManagement";
 import useEthereum from "./WEB3/useEthereum";
 import {  
@@ -17,7 +16,7 @@ import {
     Route,
     Link
 } from 'react-router-dom';
-
+import {AuthProvider} from "./Context/AuthProvider";
 
 
 // Importing the Bootstrap CSS
@@ -28,7 +27,6 @@ export const userWallet = React.createContext()
 export const backendInfo = React.createContext()
 
 const App = () =>{
-    // console.log(SymptomList());
     return(
         <Provider store={store}>
             <userWallet.Provider value={useEthereum()}>
@@ -51,7 +49,9 @@ const App = () =>{
 
 
 ReactDOM.createRoot(document.querySelector("#root")).render(
-    <App></App>   
+    
+    <App></App>
+  
     // <React.StrictMode>
     //   <StyledEngineProvider injectFirst>
     //     <Diagnosis />

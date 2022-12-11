@@ -6,8 +6,9 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-
+import AuthContext from '../Context/AuthProvider';
 export default function ButtonAppBar() {
+  // const {setLogin} = React.useContext(AuthContext);
   return (
     <Box sx={{ flexGrow: 2 ,boxShadow: 1,borderRadius:2}}>
       <AppBar position="static">

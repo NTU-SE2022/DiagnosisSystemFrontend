@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import AuthContext from '../Context/AuthProvider';
 import axios from "axios";
 
 function Copyright(props) {
@@ -39,26 +40,35 @@ export default function SignIn() {
     baseURL: "https://diagnosis-back.host.chillmonkey.com.tw/api" 
   });
 
+  const {auth,setAuth} = React.useContext(AuthContext)
+  console.log(setAuth)
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const send_body = {account:data.get('account'),password:data.get('password')}
     client.post('/login',send_body).then(response => {
+      console.log(response);
       if(response.status == 200){
+        // setAuth({'account':1,'password':1})
         window.location.href = '/Certificate';
       }else{
         alert('Wrong Password');
       }
   }).catch(error =>{
-    alert('Wrong Password');
+    alert('Wrong Account');
     console.log(error);
-  });
-    // console.log({
-    //   email: data.get('email'),
-    //   password: data.get('password'),
-    // });
+  }).then(
     
-  };
+  );    
+};
+  // React.useEffect(()=>{
+  //   if(login){
+  //     console.log(login)
+  //     window.location.href = '/Certificate';
+  //   }
+  // },[login])
+  
 
   return (
     <ThemeProvider theme={theme}>
