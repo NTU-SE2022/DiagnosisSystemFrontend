@@ -25,11 +25,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 export const userWallet = React.createContext()
 
+export const backendInfo = React.createContext()
+
 const App = () =>{
     // console.log(SymptomList());
     return(
         <Provider store={store}>
             <userWallet.Provider value={useEthereum()}>
+<<<<<<< HEAD
             <Router>
                 <Routes>
                     <Route exact path="/" element={<Diagnosis />}/>
@@ -40,6 +43,20 @@ const App = () =>{
                     <Route exact path="/CreateCertificate/:account" element={<CreateCertificate/>}/>
                 </Routes>
             </Router>
+=======
+                <backendInfo.Provider value={{baseURL: "http://diagnosis-back.host.chillmonkey.com.tw/api/", ContractAddress: "0xe02401b8b4d84189d0c013e9e20b2c87a33a5881"}}>
+                    <Router>
+                        <Routes>
+                            <Route exact path="/" element={<Diagnosis />}/>
+                            <Route exact path="/SignIn" element={<SignIn/>}/>
+                            <Route exact path="/Certificate" element={<CertificateManagement/>}/>
+                            <Route exact path="/PatientCertificate" element={<PatientCertificateManagement/>}/>
+                            <Route exact path="/CertificateRecord" element={<OutCertificate/>}/>
+                            <Route exact path="/CreateCertificate" element={<CreateCertificate symptom={SymptomList()}/>}/>
+                        </Routes>
+                    </Router>
+                </backendInfo.Provider>
+>>>>>>> jesse
             </userWallet.Provider> 
         </Provider>
     )  

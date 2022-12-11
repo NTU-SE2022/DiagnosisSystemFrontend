@@ -13,6 +13,8 @@ import AddIcon from '@mui/icons-material/Add';
 import Typography from '@mui/material/Typography';
 import { blue } from '@mui/material/colors';
 import { Box } from '@mui/system';
+import { userWallet, backendInfo } from '..';
+import axios from "axios";
 
 function SimpleDialog(props) {
     const { onClose, selectedValue, open } = props;
@@ -50,24 +52,49 @@ function SimpleDialog(props) {
   };
 
 export default function EnterRoomButton(props){
-    
-    const [open, setOpen] = React.useState(false);
-    const [selectedValue, setSelectedValue] = React.useState();
-  
-    const handleClickOpen = () => {
-      setOpen(true);
-    };
-  
-    const handleClose = (value) => {
-      setOpen(false);
-      setSelectedValue(value);
-    };
-    return(
-        <Box>
-        <Button variant="outlined" onClick={handleClickOpen} sx={{backgroundColor:"#fff"}}>
-            Enter Room
-        </Button>
-        <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose}></SimpleDialog>
-        </Box>
+  const{
+    baseURL
+  } = React.useContext(backendInfo);
+
+  const {
+    isMetaMaskInstalled,
+    provider,
+    accounts,
+    web3,
+    enable,
+    disable
+} = React.useContext(userWallet);
+
+  const [open, setOpen] = React.useState(false);
+  const [selectedValue, setSelectedValue] = React.useState();
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (value) => {
+    if (value === undefined){
+      return;
+    }
+    setOpen(false);
+    setSelectedValue(value);
+    console.log(baseURL+"clinic/"+value+"/"+accounts[0]);
+    axios.post(baseURL+"clinic/"+value+"/"+accounts[0]
+    // ,{
+    //   roomNo: value,
+    //   patient: accounts[0]
+    // }
     )
+      .then((response) => console.log("choose clinic no." + value))
+      .catch((error) => console.log("clinic error: " + error))
+  };
+
+  return(
+      <Box>
+      <Button variant="outlined" onClick={handleClickOpen} sx={{backgroundColor:"#fff"}}>
+          Enter Room
+      </Button>
+      <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose}></SimpleDialog>
+      </Box>
+  )
 }
