@@ -14,7 +14,7 @@ import { Button } from '@mui/material';
 import DataGridDemo from './DataGridDemo';
 import ButtonAppBar from './AppBar';
 import axios from "axios";
-import { AuthContext } from '..';
+import { AuthContext } from '../Context/AuthProvider';
 // const rows: GridRowsProp = [
 //   { id: 1, col1: "Hello", col2: "World" },
 //   { id: 2, col1: "MUI X", col2: "is awesome" },
@@ -56,12 +56,16 @@ export default function CertificateManagement(){
     const [addressListRoom2,setAddressListRoom2] = React.useState([])
     const [nowAccountRoom2,setNowAccountRoom2] = React.useState("");
     React.useEffect(()=>{
-        console.log(auth)
+        console.log('=========================');
+        console.log(auth);
+        console.log('=========================');
     },[auth])
+
     // if(!auth){
     //     // alert('尚未登入')
     //     // window.location.href='/SignIn'
     // }
+
     React.useEffect(() => {
         client.get('/medicalCertificates').then(response => {
             setPatientAddress(response.data.data.medicalCertificatesList);
