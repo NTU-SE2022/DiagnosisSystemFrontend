@@ -95,15 +95,19 @@ function setSymptomAndLevel(allSymptoms,hasSymptoms){
 
   let symptom ="";
   let level = "";
-  allSymptoms.forEach(element => {
-    symptom = symptom.concat(',',element.name)
-    if(hasSymptoms.some((s => s.name == element.name))){
-      const hasSymptom = hasSymptoms.filter(s => s.name == element.name)
-      level = level.concat(',',transLevel(hasSymptom[0].level))
-    }else{
-      level = level.concat(',',transLevel(element.level))
-    }
+  // allSymptoms.forEach(element => {
+  //   symptom = symptom.concat(',',element.name)
+  //   if(hasSymptoms.some((s => s.name == element.name))){
+  //     const hasSymptom = hasSymptoms.filter(s => s.name == element.name)
+  //     level = level.concat(',',transLevel(hasSymptom[0].level))
+  //   }else{
+  //     level = level.concat(',',transLevel(element.level))
+  //   }
     
+  // });
+  hasSymptoms.forEach(element => {
+    symptom = symptom.concat(',',element.name);
+    level = level.concat(',',transLevel(element.level));
   });
   level = level.substring(1)
   symptom = symptom.substring(1)
