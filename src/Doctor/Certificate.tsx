@@ -4,7 +4,7 @@ import ButtonAppBar from './AppBar';
 import { TextareaAutosize } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import {Button} from '@mui/material';
-import { Box } from '@mui/system';
+import Box from '@mui/material/Box';
 import { useLocation, Link } from "react-router-dom";
 const theme = createTheme();
 
@@ -14,33 +14,40 @@ const theme = createTheme();
 
 // const string_content = '1'
 
+var colors: {[index: string]:string} = {
+  '0': '#1b5e20',
+  '1': '#01579b',
+  '2': '#e65100',
+  '3': '#c62828',
+};
+
 export default function OutCertificate(props: any){
-    const location = useLocation();
-    // const content = {
-    //     "ID":"4",
-    //     "Wallet Address":"123",
-    //     "症狀":"123"
-    // }
-    const content = location.state;
-    const levels = content.levels.split(',')
-    return(
-        <React.Fragment>
-            <ButtonAppBar></ButtonAppBar>
-            {/* <Typography value={JSON.stringify(content)}>{JSON.stringify(content)}</Typography> */}
-            <Box sx={{border:1 ,p:3}}>
-            <Typography >ID:{content.id}</Typography>
-            <Typography >Address:{content.patientAddress}</Typography>
-            <Typography >Symptoms:
-            {content.symptoms.split(',').map((symptom:string,index:string)=>(
-                <Box key={symptom} component='li'>{symptom}: {transDescription(levels[index])}</Box>
-            ))}</Typography>
-            </Box>
-            <Box sx={{textAlign:'right',p:2}}>
-            <Link to='/Certificate'>Back</Link>
-            </Box>
-            
-        </React.Fragment>
-    );
+  const location = useLocation();
+  // const content = {
+  //     "ID":"4",
+  //     "Wallet Address":"123",
+  //     "症狀":"123"
+  // }
+  const content = location.state;
+  const levels = content.levels.split(',')
+  return(
+    <React.Fragment>
+      <ButtonAppBar></ButtonAppBar>
+      {/* <Typography value={JSON.stringify(content)}>{JSON.stringify(content)}</Typography> */}
+      <Box sx={{border:1 ,p:3}}>
+        <Typography >ID:{content.id}</Typography>
+        <Typography >Address:{content.patientAddress}</Typography>
+        <Typography >Symptoms:
+          {content.symptoms.split(',').map((symptom:string,index:string)=>(
+            <Box key={symptom} component='li' color={colors[levels[index]]}>{symptom}: {transDescription(levels[index])}</Box>
+          ))}
+        </Typography>
+      </Box>
+      <Box sx={{textAlign:'right',p:2}}>
+        <Link to='/Certificate'>Back</Link>
+      </Box>
+    </React.Fragment>
+  );
 }
 
 var levelTransitions:{[index: string]:string} = {

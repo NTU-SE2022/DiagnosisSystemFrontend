@@ -139,11 +139,12 @@ function BorderBox(props:any){
 
 function BorderBoxContent(props:any){
     const symptoms: Symptom[] = props.value.symptoms;
-    var colors: {[index: string]:string} = {};
-    colors['0'] = 'success.dark';
-    colors['1'] = 'info.dark';
-    colors['2'] = 'warning.dark';
-    colors['3'] = 'error.dark';
+    var colors: {[index: string]:string} = {
+        '0': 'success.dark',
+        '1': 'info.dark',
+        '2': 'warning.dark',
+        '3': 'error.dark',
+    };
 
     var levelDescriptions:{[index: string]:string} = {
         '0': '(Healthy, 0)',
