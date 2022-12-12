@@ -5,6 +5,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { Button } from '@mui/material';
+import { transDescription } from './Certificate'
+
 export default function RowRadioButtonsGroup(props) {
     const [value, setValue] = React.useState('');
     const levelChange = (event)=>{
@@ -21,9 +23,7 @@ export default function RowRadioButtonsGroup(props) {
           value={value}
           onChange={levelChange}
         >
-          <FormControlLabel value="LOW" control={<Radio />} label="LOW" />
-          <FormControlLabel value="MEDIUM" control={<Radio />} label="MEDIUM" />
-          <FormControlLabel value="HIGH" control={<Radio />} label="HIGH" />
+          {Array.from(Array(4).keys()).map((i) => (<FormControlLabel value={transDescription(i)} control={<Radio />} label={transDescription(i)} />))}
           <Button onClick={()=>{props.onDelete(props.value.name)}}>Delete</Button>
         </RadioGroup>
       </FormControl>

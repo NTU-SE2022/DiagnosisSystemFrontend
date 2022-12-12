@@ -49,21 +49,29 @@ export default function SignIn() {
     const data = new FormData(event.currentTarget);
     const send_body = {account:data.get('account'),password:data.get('password')}
     console.log(send_body)
-    client.post('/login',send_body).then(response => {
-      console.log(response);
-      if(response.status == 200){
-        setAuth({'account':send_body.account,'status':'login'});
-        navigate('/Certificate');
-      }else{
-        alert('Wrong Password');
-      }
-  }).catch(error =>{
-    alert('Wrong Account');
-    console.log(error);
-  }).then(
-    
-  );    
-};
+    if (send_body.account == ""){
+      alert("Account cannot be empty")
+    }
+    else if (send_body.password == ""){
+      alert("Password cannot be empty")
+    }
+    else{
+      client.post('/login',send_body).then(response => {
+        console.log(response);
+        if(response.status == 200){
+          setAuth({'account':send_body.account,'status':'login'});
+          navigate('/Certificate');
+        }else{
+          console.log("Unexpected status!")
+        }
+      }).catch(error =>{
+        alert('Wrong account or password');
+        console.log(error);
+      }).then(
+        
+      );
+    }
+  };
   
 
   return (

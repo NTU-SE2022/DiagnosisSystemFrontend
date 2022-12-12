@@ -12,6 +12,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import {useParams} from 'react-router-dom';
 import axios from 'axios';
 import { useLocation, Link } from "react-router-dom";
+import { transDescription } from './Certificate';
 const config = {
     baseURL: "https://diagnosis-back.host.chillmonkey.com.tw/api/symptoms",
     // baseURL:"http://localhost:3000/testdata/testSymptom.json"
@@ -41,7 +42,7 @@ export default function CreateCertificate(props){
         axios(config).then((response) =>{
             console.log(response)
             let data = response.data.data.symptomsList;
-            data.map((symptom) => symptom['level'] = "HEALTH");
+            data.map((symptom) => symptom['level'] = transDescription(0));
             setSymptomList(data)
         }).catch((error)=>{
             console.log(error);

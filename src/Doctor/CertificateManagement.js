@@ -145,7 +145,6 @@ export default function CertificateManagement(){
         //     // setCustomFilter(custom=>[...custom,{id:1,columnField:'symptoms',operatorValue: 'contains', value: symptomsKeyword}])
         // }
     }
-    console.log(auth['account'])
     return(
         <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="sx" sx={{ flexGrow: 1,boxShadow: 1, borderRadius: 2, backgroundColor: '#E0E0E0', p: 2}}>

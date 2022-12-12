@@ -7,6 +7,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
+import { transLevel } from './Certificate'
+
 export default function CreateCertificateButton(props) {
   const [open, setOpen] = React.useState(false);
   const [context,setContext] =React.useState("生成及發送 NFT 至病人錢包中...")
@@ -117,30 +119,5 @@ function setSymptomAndLevel(allSymptoms,hasSymptoms){
       symptom:symptom,
       level:level
     }
-  )
-}
-
-// 0 (HEALTH
-//   1 (LOW
-//   2 (MEDIUM
-//   3 (HIGH
-function transLevel(level){
-  let trans = ""
-  switch (level) {
-    case 'HEALTH':
-      trans = "0";
-      break
-    case 'LOW':
-      trans = "1";
-      break
-    case 'MEDIUM':
-      trans = "2";
-      break
-    case 'HIGH':
-      trans = "3";
-      break
-  }
-  return(
-    trans
   )
 }

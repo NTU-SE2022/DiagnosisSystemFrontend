@@ -8,19 +8,13 @@ import { Box } from '@mui/system';
 import { useLocation, Link } from "react-router-dom";
 const theme = createTheme();
 
-const content ={
-    "ID":"4",
-    "Wallet Address":"123",
-    "症狀":"123"
-};
-
 // const string_content = (content)=>{
 //     return JSON.stringify(content);
 // };
 
 // const string_content = '1'
 
-export default function OutCertificate(props){
+export default function OutCertificate(props: any){
     const location = useLocation();
     // const content = {
     //     "ID":"4",
@@ -37,8 +31,8 @@ export default function OutCertificate(props){
             <Typography >ID:{content.id}</Typography>
             <Typography >Address:{content.patientAddress}</Typography>
             <Typography >Symptoms:
-            {content.symptoms.split(',').map((symptom,index)=>(
-                <Box key={symptom} component='li'>{symptom}:{transLevel(levels[index])}</Box>
+            {content.symptoms.split(',').map((symptom:string,index:string)=>(
+                <Box key={symptom} component='li'>{symptom}: {transDescription(levels[index])}</Box>
             ))}</Typography>
             </Box>
             <Box sx={{textAlign:'right',p:2}}>
@@ -49,24 +43,29 @@ export default function OutCertificate(props){
     );
 }
 
-function transLevel(level){
-    let trans = ""
-    switch (level) {
-      case '0':
-        trans = 'HEALTH';
-        break
-      case '1':
-        trans = "LOW";
-        break
-      case '2':
-        trans = "MEDIUM";
-        break
-      case '3':
-        trans = "HIGH";
-        break
-    }
-    return(
-      trans
-    )
-  }
+var levelTransitions:{[index: string]:string} = {
+  'Healthy': '0',
+  'Low': '1',
+  'Medium': '2',
+  'High': '3',
+}
+
+var descriptionTransitions:{[index: number]:string} = {
+  0 : 'Healthy',
+  1 : 'Low',
+  2 : 'Medium',
+  3 : 'High',
+}
+
+export function transDescription(level:number){
+  let desc = descriptionTransitions[level]
+  return(
+    desc
+  )
+}
+
+export function transLevel(desc:string){
+  let level = levelTransitions[desc]
+  return level
+}
 

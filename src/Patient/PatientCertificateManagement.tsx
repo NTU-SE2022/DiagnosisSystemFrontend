@@ -137,10 +137,10 @@ function BorderBoxContent(props:any){
     colors['3'] = 'error.dark';
 
     var levelDescriptions:{[index: string]:string} = {
-        '0': '(No problem, 0)',
-        '1': '(Mild, 1)',
-        '2': '(Moderate, 2)',
-        '3': '(Severe, 3)',
+        '0': '(Healthy, 0)',
+        '1': '(Low, 1)',
+        '2': '(Medium, 2)',
+        '3': '(High, 3)',
     }
 
     return(
