@@ -13,6 +13,8 @@ import {useParams} from 'react-router-dom';
 import axios from 'axios';
 import { useLocation, Link } from "react-router-dom";
 import { transDescription } from './Certificate';
+import { AuthContext } from '../Context/AuthProvider';
+import { useNavigate } from 'react-router-dom';
 const config = {
     baseURL: "https://diagnosis-back.host.chillmonkey.com.tw/api/symptoms",
     // baseURL:"http://localhost:3000/testdata/testSymptom.json"
@@ -35,9 +37,17 @@ export default function CreateCertificate(props){
     //     ],
     //     temp:'1',
     // };
+    const navigate = useNavigate();
+    const {auth,setAuth} = React.useContext(AuthContext);
+    console.log(auth)
+    if(auth.status != 'login'){
+        alert('尚未登入')
+        navigate('/SignIn')
+    }
+
     let { account,room } = useParams();
     let content = props.content;
-    const [symptomList ,setSymptomList] = React.useState([])
+    const [symptomList ,setSymptomList] = React.useState([]);
     React.useEffect(() =>{
         axios(config).then((response) =>{
             console.log(response)
