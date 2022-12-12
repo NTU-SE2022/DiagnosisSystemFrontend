@@ -40,7 +40,11 @@ return(
     variant="contained"
     style={{margin: '0 auto', display: "flex"}}
     onClick={() => {
-      enable();
+      if(!isMetaMaskInstalled){
+        alert('Cannot Find MetaMask, Check https://metamask.io/')
+      }else{
+        enable();
+      }
     }}
     disabled={Boolean(web3)}
   >
