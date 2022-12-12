@@ -15,6 +15,7 @@ import ButtonAppBar from './AppBar';
 import {Stack} from '@mui/material';
 import PropTypes from 'prop-types';
 import { userWallet } from '..';
+import { useNavigate } from 'react-router';
 import axios from "axios";
 import { AllMedicalCertificate, MedicalCertificate, Symptom } from '../store/MedicalCertificate';
 
@@ -39,6 +40,14 @@ export default function PatientCertificateManagement(){
         enable,
         disable
     } = React.useContext(userWallet);
+
+    const nav = useNavigate()
+    React.useEffect(()=>{
+        if(accounts.length == 0){
+            disable();
+            nav('/');
+        }
+    }, [])
 
     const pageCount = 2;
     const [pageNum,setpageNum] = React.useState(1);
